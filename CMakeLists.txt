@@ -1,0 +1,37 @@
+# 指定使用的CMake最低版本
+cmake_minimum_required(VERSION 3.24)
+
+# 项目名称
+project(TurboNet)
+
+# 指定C++编译器使用的C++标准版本
+set(CMAKE_CXX_STANDARD 20)
+
+# 指定编译器包含目录
+include_directories(
+        ${PROJECT_SOURCE_DIR}/src/base
+        ${PROJECT_SOURCE_DIR}/src/logger
+)
+
+# 指定目录下的源文件
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/base SRC_BASE)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/logger SRC_LOG)
+
+# 生成动态库
+add_library(
+        TurboNet SHARED
+        ${SRC_LOG}
+)
+
+# 设置生成的动态库路径
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
+# 设置默认安装路径
+set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
+
+# 头文件安装路径
+install(
+        DIRECTORY ${PROJECT_SOURCE_DIR}/src/
+        DESTINATION include
+        FILES_MATCHING PATTERN "*.h"
+)
