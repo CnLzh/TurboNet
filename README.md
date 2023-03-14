@@ -5,15 +5,15 @@ A high-performance network library in C++20 that adopts the one loop per thread 
 This is a multi-thread network library based on the Reactor pattern and the one loop per thread design, inspired by the `muduo` network library.
 
 Include the following features:
-- Network communication function
+- Network communication function:
 Provide encapsulation and implementation of TCP protocol.
-- Event-driven framework
+- Event-driven framework:
 I/O multiplexing and event loop mechanism based on the Reactor pattern.
-- Multithreading support
+- Multithreading support:
 Utilize thread pool to support thread-safe multithreaded programing.
-- Timer mechanism
+- Timer mechanism:
 Provide timer mechanism to support triggering and handing of timed events.
-- Exception handing and logging
+- Exception handing and logging:
 Including asynchronous logging and exception handing mechanisms.
 
 ## Development Environment
