@@ -19,6 +19,10 @@ class LogStream {
   using Buffer = FixedBuffer<kSmallBuffer>;
 
  public:
+  void Append(const tb_s8* data, tb_s32 len);
+  void ResetBuffer();
+  [[nodiscard]] const Buffer& GetBuffer() const;
+
   Self &operator<<(bool);
   Self &operator<<(short);
   Self &operator<<(unsigned short);

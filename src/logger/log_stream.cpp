@@ -11,6 +11,18 @@ static_assert(sizeof(digits) == 20, "wrong number of digits");
 const char digits_hex[] = "0123456789ABCDEF";
 static_assert(sizeof digits_hex == 17, "wrong number of digitsHex");
 
+void LogStream::Append(const tb_s8 *data, tb_s32 len) {
+  buffer_.Append(data, len);
+}
+
+const LogStream::Buffer &LogStream::GetBuffer() const {
+  return buffer_;
+}
+
+void LogStream::ResetBuffer() {
+  buffer_.Reset();
+}
+
 LogStream &LogStream::operator<<(bool v) {
   buffer_.Append(v ? "1" : "0", 1);
   return *this;

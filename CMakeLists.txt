@@ -20,6 +20,7 @@ aux_source_directory(${PROJECT_SOURCE_DIR}/src/logger SRC_LOG)
 # 生成动态库
 add_library(
         TurboNet SHARED
+        ${SRC_BASE}
         ${SRC_LOG}
 )
 

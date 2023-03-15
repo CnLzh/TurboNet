@@ -1,16 +1,51 @@
 // Copyright (C) 2023
 //
-// File:     PublicDefine.h
+// File:     public_define.h
 // Brief:    Generic Macro Definition Module.
 // Author:   CnLzh
 
 #ifndef TURBONET_SRC_BASE_PUBLIC_DEFINE_H_
 #define TURBONET_SRC_BASE_PUBLIC_DEFINE_H_
 
+#include <type_traits>
+#include <cstdint>
+
 // Disable Copy and Assignment Constructors
 #define DISALLOW_COPY_AND_ASSIGN(ClassName)  \
     ClassName (const ClassName&) = delete;   \
     ClassName operator=(const ClassName&) = delete;
+
+// overloading operator "==", "!="
+template<typename T>
+class EqualityComparable {
+ public:
+  friend bool operator==(const T &lhs, const T &rhs) { return lhs.EqualTo(rhs); };
+  friend bool operator!=(const T &lhs, const T &rhs) { return !lhs.EqualTo(rhs); };
+
+ private:
+  template<typename U = T>
+  auto EqualTo(const T &rhs) const
+  -> std::enable_if_t<std::is_same_v<decltype(std::declval<U>() == std::declval<U>()), bool>, bool> {
+	return static_cast<const U &>(*this) == static_cast<const U &>(rhs);
+  }
+};
+
+// overloading operator "<", "<=", ">", ">="
+template<typename T>
+class LessThanComparable {
+ public:
+  friend bool operator<(const T &lhs, const T &rhs) { return lhs.LessThan(rhs); };
+  friend bool operator>(const T &lhs, const T &rhs) { return rhs < lhs; };
+  friend bool operator<=(const T &lhs, const T &rhs) { return !(rhs < lhs); };
+  friend bool operator>=(const T &lhs, const T &rhs) { return !(lhs < rhs); };
+
+ private:
+  template<typename U = T>
+  auto LessThan(const T &rhs) const
+  -> std::enable_if_t<std::is_same_v<decltype(std::declval<U>() == std::declval<U>()), bool>, bool> {
+	return static_cast<const U &>(*this) < static_cast<const U &>(rhs);
+  }
+};
 
 // Primitive data types
 using tb_s8 = char;
@@ -22,6 +57,7 @@ using tb_u16 = unsigned short;
 using tb_s32 = int;
 using tb_u32 = unsigned int;
 
+using tb_s64_t = int64_t;
 using tb_s64 = long long;
 using tb_u64 = unsigned long long;
 
