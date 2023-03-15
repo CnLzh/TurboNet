@@ -9,9 +9,11 @@
 
 #include "public_define.h"
 
+namespace turbo {
+
 class Logger {
  public:
-  enum LogLevel{
+  enum LogLevel {
 	DEBUG = 0,
 	INFO,
 	WARNING,
@@ -22,5 +24,7 @@ class Logger {
  private:
   DISALLOW_COPY_AND_ASSIGN(Logger)
 };
+
+} // turbo
 
 #endif //TURBONET_SRC_LOGGER_LOGGER_H_
