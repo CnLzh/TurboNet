@@ -19,6 +19,7 @@ Including asynchronous logging and exception handing mechanisms.
 ## Development Environment
 - OS: `Ubuntu 22.04.1 LTS`
 - Language: `C++ 20`
+- Coding style: `Google C++`
 - Compiler: `g++ 11.3.0`
 - Build: `CMake 3.25.3`
 

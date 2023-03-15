@@ -1,18 +1,18 @@
 // Copyright (C) 2023
 //
-// File:     Logger.h
-// Brief:    The Logger class provides interfaces for users to operate on logs.
+// File:     logger.h
+// Brief:    The logger class provides interfaces for users to operate on logs.
 // Author:   CnLzh
 
 #ifndef TURBONET_SRC_LOGGER_LOGGER_H_
 #define TURBONET_SRC_LOGGER_LOGGER_H_
 
-#include "PublicDefine.h"
+#include "public_define.h"
 
 class Logger {
  public:
   enum LogLevel{
-	DEBUG,
+	DEBUG = 0,
 	INFO,
 	WARNING,
 	ERROR,
