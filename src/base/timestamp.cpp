@@ -18,7 +18,7 @@ std::string Timestamp::ToString() const {
   tb_s8 buf[32] = {0};
   auto seconds = std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch_).count();
   auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(time_since_epoch_).count();
-  snprintf(buf, sizeof(buf), "%ld.%06ld", seconds, microseconds);
+  snprintf(buf, sizeof(buf) - 1, "%ld.%06ld", seconds, microseconds);
   return buf;
 }
 
