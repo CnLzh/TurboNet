@@ -9,6 +9,7 @@
 
 #include "public_define.h"
 
+#include <chrono>
 #include <string>
 
 namespace turbo {
@@ -16,35 +17,38 @@ namespace turbo {
 class Timestamp
 	: public EqualityComparable<Timestamp>,
 	  public LessThanComparable<Timestamp> {
+
+  using SystemLock = std::chrono::system_clock;
+  using Duration = SystemLock::duration;
+
  public:
   Timestamp();
-  explicit Timestamp(const tb_s64_t &microseconds_since_epoch);
+  explicit Timestamp(const Duration &time_since_epoch);
 
   static Timestamp Now();
 
   [[nodiscard]] std::string ToString() const;
   [[nodiscard]] std::string ToFormatString(bool show_microseconds = false) const;
 
-  [[nodiscard]] tb_s64_t MicrosecondsSinceEpoch() const;
+  [[nodiscard]] Duration TimeSinceEpoch() const;
 
   static const int kMicroSecondsPerSecond = 1000 * 1000;
 
  private:
-  tb_s64_t microseconds_since_epoch_;
-
+  Duration time_since_epoch_;
 };
 
 inline bool operator<(const Timestamp &lhs, const Timestamp &rhs) {
-  return lhs.MicrosecondsSinceEpoch() < rhs.MicrosecondsSinceEpoch();
+  return lhs.TimeSinceEpoch() < rhs.TimeSinceEpoch();
 }
 
 inline bool operator==(const Timestamp &lhs, const Timestamp &rhs) {
-  return lhs.MicrosecondsSinceEpoch() == rhs.MicrosecondsSinceEpoch();
+  return lhs.TimeSinceEpoch() == rhs.TimeSinceEpoch();
 }
 
 inline Timestamp AddTime(const Timestamp &timestamp, const tb_f64 &seconds) {
-  auto delta = static_cast<tb_s64_t>(seconds * Timestamp::kMicroSecondsPerSecond);
-  return Timestamp(timestamp.MicrosecondsSinceEpoch() + delta);
+  auto delta = static_cast<tb_s32>(seconds * Timestamp::kMicroSecondsPerSecond);
+  return Timestamp(timestamp.TimeSinceEpoch() + std::chrono::microseconds(delta));
 }
 
 } // turbo
