@@ -45,11 +45,28 @@ class Logger {
    private:
 	const char *data_;
 	tb_s32 size_;
-
-	DISALLOW_COPY_AND_ASSIGN(SourceFile)
   };
 
+  Logger(SourceFile file, tb_s32 line);
+  Logger(SourceFile file, LogLevel level);
+  Logger(SourceFile file, LogLevel level, const tb_s8* func);
+
  private:
+
+  class Impl{
+   public:
+	using LogLevel = Logger::LogLevel;
+
+	Impl(LogLevel log_level, tb_s32 errno, const SourceFile& file, tb_s32 line);
+	void FormatTime();
+
+	Timestamp timestamp_;
+	LogLevel log_level_;
+	LogStream log_stream_;
+	tb_s32 line_;
+	SourceFile source_file_;
+  };
+
   DISALLOW_COPY_AND_ASSIGN(Logger)
 };
 

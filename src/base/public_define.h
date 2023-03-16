@@ -9,43 +9,9 @@
 
 #include <type_traits>
 #include <cstdint>
+#include <cstring>
 
-// Disable Copy and Assignment Constructors
-#define DISALLOW_COPY_AND_ASSIGN(ClassName)  \
-    ClassName (const ClassName&) = delete;   \
-    ClassName operator=(const ClassName&) = delete;
-
-// overloading operator "==", "!="
-template<typename T>
-class EqualityComparable {
- public:
-  friend bool operator==(const T &lhs, const T &rhs) { return lhs.EqualTo(rhs); };
-  friend bool operator!=(const T &lhs, const T &rhs) { return !lhs.EqualTo(rhs); };
-
- private:
-  template<typename U = T>
-  auto EqualTo(const T &rhs) const
-  -> std::enable_if_t<std::is_same_v<decltype(std::declval<U>() == std::declval<U>()), bool>, bool> {
-	return static_cast<const U &>(*this) == static_cast<const U &>(rhs);
-  }
-};
-
-// overloading operator "<", "<=", ">", ">="
-template<typename T>
-class LessThanComparable {
- public:
-  friend bool operator<(const T &lhs, const T &rhs) { return lhs.LessThan(rhs); };
-  friend bool operator>(const T &lhs, const T &rhs) { return rhs < lhs; };
-  friend bool operator<=(const T &lhs, const T &rhs) { return !(rhs < lhs); };
-  friend bool operator>=(const T &lhs, const T &rhs) { return !(lhs < rhs); };
-
- private:
-  template<typename U = T>
-  auto LessThan(const T &rhs) const
-  -> std::enable_if_t<std::is_same_v<decltype(std::declval<U>() == std::declval<U>()), bool>, bool> {
-	return static_cast<const U &>(*this) < static_cast<const U &>(rhs);
-  }
-};
+namespace turbo {
 
 // Primitive data types
 using tb_s8 = char;
@@ -64,4 +30,53 @@ using tb_u64 = unsigned long long;
 using tb_f32 = float;
 using tb_f64 = double;
 
+// Disable Copy and Assignment Constructors
+#define DISALLOW_COPY_AND_ASSIGN(ClassName)  \
+    ClassName (const ClassName&) = delete;   \
+    ClassName operator=(const ClassName&) = delete;
+
+// auto generated operator "!="
+// derived must implement operator "="
+template<typename T>
+class EqualityComparable {
+ public:
+  friend bool operator!=(const T &lhs, const T &rhs) { return !lhs.EqualTo(rhs); };
+
+ private:
+  template<typename U = T>
+  auto EqualTo(const T &rhs) const
+  -> std::enable_if_t<std::is_same_v<decltype(std::declval<U>() == std::declval<U>()), bool>, bool> {
+	return static_cast<const U &>(*this) == static_cast<const U &>(rhs);
+  }
+};
+
+// auto generated operator "<=", ">", ">="
+// derived must implement operator "<"
+template<typename T>
+class LessThanComparable {
+ public:
+  friend bool operator>(const T &lhs, const T &rhs) { return rhs < lhs; };
+  friend bool operator<=(const T &lhs, const T &rhs) { return !(rhs < lhs); };
+  friend bool operator>=(const T &lhs, const T &rhs) { return !(lhs < rhs); };
+
+ private:
+  template<typename U = T>
+  auto LessThan(const T &rhs) const
+  -> std::enable_if_t<std::is_same_v<decltype(std::declval<U>() == std::declval<U>()), bool>, bool> {
+	return static_cast<const U &>(*this) < static_cast<const U &>(rhs);
+  }
+};
+
+// Clear memory
+inline void MemZero(void *p, size_t len) {
+  memset(p, 0, len);
+}
+
+// Safe type conversion
+template<typename To, typename From>
+inline To implicit_cast(From const &f) {
+  return f;
+}
+
+}
 #endif //TURBONET_SRC_BASE_PUBLIC_DEFINE_H_

@@ -20,7 +20,7 @@ class FixedBuffer {
   FixedBuffer() : cur_(data_) {};
 
   void Append(const tb_s8 *buf, const tb_u64 &len) {
-	if (static_cast<tb_u64>(Avail()) > len) {
+	if (implicit_cast<tb_u64>(Avail()) > len) {
 	  memcpy(cur_, buf, len);
 	  cur_ += len;
 	}
