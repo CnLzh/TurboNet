@@ -36,7 +36,7 @@ std::string Timestamp::ToFormatString(bool show_microseconds) const {
 			 local_time->tm_hour, local_time->tm_min, local_time->tm_sec,
 			 milliseconds % 1000, microseconds % 1000);
   } else {
-	snprintf(buf, sizeof(buf), "%4d%02d%02d %02d:%02d:%02d",
+	snprintf(buf, sizeof(buf), "%4d-%02d-%02d %02d:%02d:%02d",
 			 local_time->tm_year + 1900, local_time->tm_mon + 1, local_time->tm_mday,
 			 local_time->tm_hour, local_time->tm_min, local_time->tm_sec);
   }
