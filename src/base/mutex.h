@@ -18,11 +18,14 @@ class MutexLock {
   void Lock();
   void UnLock();
 
+  std::mutex& GetMutex();
+
   [[nodiscard]] bool IsLockedByThisThread() const;
   void AssertLocked() const;
 
  private:
 
+  friend class Condition;
   class UnAssignGuard {
    public:
 	explicit UnAssignGuard(MutexLock &owner);

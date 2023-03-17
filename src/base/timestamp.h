@@ -32,8 +32,6 @@ class Timestamp
 
   [[nodiscard]] Duration TimeSinceEpoch() const;
 
-  static const int kMicroSecondsPerSecond = 1000 * 1000;
-
  private:
   Duration time_since_epoch_;
 };
@@ -47,7 +45,7 @@ inline bool operator==(const Timestamp &lhs, const Timestamp &rhs) {
 }
 
 inline Timestamp AddTime(const Timestamp &timestamp, const tb_f64 &seconds) {
-  auto delta = static_cast<tb_s64>(seconds * Timestamp::kMicroSecondsPerSecond);
+  auto delta = static_cast<tb_s64>(seconds * kMicroSecondsPerSecond);
   return Timestamp(timestamp.TimeSinceEpoch() + std::chrono::microseconds(delta));
 }
 

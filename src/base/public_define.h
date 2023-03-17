@@ -74,5 +74,8 @@ inline To implicit_cast(From const &f) {
   return f;
 }
 
+static const tb_s64 kMicroSecondsPerSecond = 1000 * 1000;
+static const tb_s64 kNanoSecondsPerSecond = 1000 * 1000 * 1000;
+
 }
 #endif //TURBONET_SRC_BASE_PUBLIC_DEFINE_H_

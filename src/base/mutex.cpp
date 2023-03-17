@@ -38,6 +38,10 @@ void MutexLock::AssertLocked() const {
   assert(IsLockedByThisThread());
 }
 
+std::mutex &MutexLock::GetMutex() {
+  return mutex_;
+}
+
 MutexLock::UnAssignGuard::UnAssignGuard(MutexLock &owner)
 	: owner_(owner) {
   owner_.UnAssignHolder();
@@ -55,5 +59,6 @@ MutexLockGuard::MutexLockGuard(MutexLock &mutex)
 MutexLockGuard::~MutexLockGuard() {
   mutex_.UnLock();
 }
+
 
 }
