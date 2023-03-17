@@ -39,10 +39,8 @@ using tb_f64 = double;
 // derived must implement operator "="
 template<typename T>
 class EqualityComparable {
- public:
   friend bool operator!=(const T &lhs, const T &rhs) { return !lhs.EqualTo(rhs); };
 
- private:
   template<typename U = T>
   auto EqualTo(const T &rhs) const
   -> std::enable_if_t<std::is_same_v<decltype(std::declval<U>() == std::declval<U>()), bool>, bool> {
@@ -54,12 +52,10 @@ class EqualityComparable {
 // derived must implement operator "<"
 template<typename T>
 class LessThanComparable {
- public:
   friend bool operator>(const T &lhs, const T &rhs) { return rhs < lhs; };
   friend bool operator<=(const T &lhs, const T &rhs) { return !(rhs < lhs); };
   friend bool operator>=(const T &lhs, const T &rhs) { return !(lhs < rhs); };
 
- private:
   template<typename U = T>
   auto LessThan(const T &rhs) const
   -> std::enable_if_t<std::is_same_v<decltype(std::declval<U>() == std::declval<U>()), bool>, bool> {

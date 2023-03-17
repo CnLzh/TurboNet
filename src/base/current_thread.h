@@ -9,18 +9,26 @@
 
 #include "public_define.h"
 
+#include <string>
 namespace turbo::CurrentThread{
 
-extern __thread tb_s32 t_cached_tid;
-extern __thread tb_s8 t_tid_string[32];
-extern __thread tb_s32 t_tid_string_length;
-extern __thread const tb_s8* t_thread_name;
+extern thread_local pid_t t_cached_tid;
+extern thread_local std::string t_tid_string;
+extern thread_local std::string t_thread_name;
 
-void CachedTid();
+void ConstructTid();
 
-inline tb_s32 Tid(){
-  if(__builtin_expect(t_cached_tid==0,0)) CachedTid();
+inline pid_t CachedTid(){
+  if(__builtin_expect(t_cached_tid==0,0)) ConstructTid();
   return t_cached_tid;
+}
+
+inline std::string TidString(){
+  return t_tid_string;
+}
+
+inline std::string ThreadName(){
+  return t_thread_name;
 }
 
 } // turbo
