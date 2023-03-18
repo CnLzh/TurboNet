@@ -1,6 +1,7 @@
 #include "current_thread.h"
 
-#include <thread>
+#include <sys/syscall.h>
+#include <unistd.h>
 
 namespace turbo::CurrentThread {
 

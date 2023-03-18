@@ -36,3 +36,14 @@ install(
         DESTINATION include
         FILES_MATCHING PATTERN "*.h"
 )
+
+# 不指定默认release
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+
+# 仅在debug下编译单元测试
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+    enable_testing()
+    add_subdirectory(${PROJECT_SOURCE_DIR}/src/base/test)
+endif ()

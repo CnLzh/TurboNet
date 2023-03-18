@@ -2,4 +2,5 @@
 build/
 include/
 lib/
+bin/
 cmake-build-debug/
