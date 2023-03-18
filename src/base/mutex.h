@@ -25,7 +25,7 @@ class MutexLock {
 
   friend class Condition;
   friend class MutexLockGuard;
-  
+
   class UnAssignGuard {
    public:
 	explicit UnAssignGuard(MutexLock &owner);
