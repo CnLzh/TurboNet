@@ -19,3 +19,8 @@ add_test(NAME MutexTest COMMAND MutexTest)
 add_executable(ConditionTest condition_test.cpp)
 target_link_libraries(ConditionTest TurboNet)
 add_test(NAME ConditionTest COMMAND ConditionTest)
+
+# count_down_latch test
+add_executable(CountDownLatchTest count_down_latch_test.cpp)
+target_link_libraries(CountDownLatchTest TurboNet)
+add_test(NAME CountDownLatchTest COMMAND CountDownLatchTest)

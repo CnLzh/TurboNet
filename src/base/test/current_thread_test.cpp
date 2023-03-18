@@ -1,7 +1,7 @@
 // Copyright (C) 2023
 //
-// File:     mutex_test.h
-// Brief:    Mutex until test.
+// File:     current_thread_test.h
+// Brief:    CurrentThread until test.
 // Author:   CnLzh
 
 #include "current_thread.h"

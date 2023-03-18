@@ -1,7 +1,7 @@
 /// Copyright (C) 2023
 //
 // File:     timestamp_test.h
-// Brief:    Timestamp test.
+// Brief:    Timestamp until test.
 // Author:   CnLzh
 
 #include "timestamp.h"

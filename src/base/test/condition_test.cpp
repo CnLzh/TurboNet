@@ -1,7 +1,7 @@
 /// Copyright (C) 2023
 //
-// File:     timestamp_test.h
-// Brief:    Timestamp test.
+// File:     condition_test.h
+// Brief:    Condition until test.
 // Author:   CnLzh
 
 #include "condition.h"
