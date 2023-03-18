@@ -21,8 +21,8 @@ void MutexLock::UnAssignHolder() {
 }
 
 void MutexLock::Lock() {
-  AssignHolder();
   mutex_.lock();
+  AssignHolder();
 }
 
 void MutexLock::UnLock() {
