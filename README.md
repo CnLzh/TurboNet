@@ -31,7 +31,12 @@ download:
 git clone git@github.com:CnLzh/TurboNet.git
 ```
 
-build:
+build release:
 ```
 cd ./TurboNet && bash build.sh
+```
+
+build debug for test:
+```
+cd ./TurboNet && bash build.sh -dbg && bash run_test.sh -dbg
 ```
