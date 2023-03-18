@@ -9,4 +9,10 @@ if [ ! -d "${SOURCE_DIR}/bin" ]; then
   exit 0
 fi
 
-cd "${SOURCE_DIR}/build" && make test ARGS="-VV --output-on-failure"
+if [[ $1 == '-dbg' ]]; then
+	cd "${SOURCE_DIR}/build" && make test ARGS="-VV --output-on-failure"
+else
+	cd "${SOURCE_DIR}/build" && make test
+fi
+
+
