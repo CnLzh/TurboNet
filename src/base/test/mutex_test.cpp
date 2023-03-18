@@ -3,11 +3,25 @@
 // File:     mutex_test.h
 // Brief:    Mutex until test.
 // Author:   CnLzh
-
+#include "mutex.h"
 #include <iostream>
 
+using namespace std;
+using namespace turbo;
+
 int main() {
-	std::cerr << "Test passed." << std::endl;
-	std::cerr << "Test failed: error." << std::endl;
-	return 0;
+  MutexLock mutex_test;
+  {
+	MutexLockGuard lock(mutex_test);
+	mutex_test.AssertLocked();
+	if (!mutex_test.IsLockedByThisThread()) {
+	  std::cerr << "Test failed: " << __LINE__ << endl;
+	}
+  }
+  if (mutex_test.IsLockedByThisThread()) {
+	std::cerr << "Test failed: " << __LINE__ << endl;
+  }
+
+  std::cerr << "Test passed." << std::endl;
+  return 0;
 }
