@@ -13,11 +13,11 @@ MutexLock::~MutexLock() {
 }
 
 void MutexLock::AssignHolder() {
-  holder_ = 0;
+  holder_ = CurrentThread::CachedTid();
 }
 
 void MutexLock::UnAssignHolder() {
-  holder_ = CurrentThread::CachedTid();
+  holder_ = 0;
 }
 
 void MutexLock::Lock() {
