@@ -24,3 +24,8 @@ add_test(NAME ConditionTest COMMAND ConditionTest)
 add_executable(CountDownLatchTest count_down_latch_test.cpp)
 target_link_libraries(CountDownLatchTest TurboNet)
 add_test(NAME CountDownLatchTest COMMAND CountDownLatchTest)
+
+# thread test
+add_executable(ThreadTest thread_test.cpp)
+target_link_libraries(ThreadTest TurboNet)
+add_test(NAME ThreadTest COMMAND ThreadTest)
