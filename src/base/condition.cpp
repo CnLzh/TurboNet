@@ -2,13 +2,13 @@
 
 namespace turbo {
 
-Condition::Condition(MutexLock &mutex)
+Condition::Condition(MutexLock &mutex) noexcept
 	: mutex_(mutex),
 	  lock_(mutex_.GetMutex(), std::adopt_lock) {
 
 }
 
-Condition::~Condition() {
+Condition::~Condition() noexcept {
   lock_.release();
 }
 

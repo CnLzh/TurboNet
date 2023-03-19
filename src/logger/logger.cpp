@@ -17,7 +17,7 @@ Logger::Logger(SourceFile file, LogLevel level, const tb_s8 *func) {
 Logger::Impl::Impl(LogLevel log_level,
 				   tb_s32 errno,
 				   const Logger::SourceFile &file,
-				   tb_s32 line)
+				   tb_s32 line) noexcept
 	: timestamp_(Timestamp::Now()),
 	  log_stream_(),
 	  log_level_(log_level),

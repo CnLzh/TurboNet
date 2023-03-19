@@ -16,18 +16,18 @@ namespace turbo {
 
 class Condition final {
  public:
-  explicit Condition(MutexLock& mutex);
-  ~Condition();
+  explicit Condition(MutexLock &mutex) noexcept;
+  ~Condition() noexcept;
 
   void Wait();
   // return true if timeout, false otherwise.
-  bool WaitForSeconds(const tb_f64& seconds);
+  bool WaitForSeconds(const tb_f64 &seconds);
 
   void Notify();
   void NotifyAll();
 
  private:
-  MutexLock& mutex_;
+  MutexLock &mutex_;
   std::unique_lock<std::mutex> lock_;
   std::condition_variable cond_;
   DISALLOW_COPY_AND_ASSIGN(Condition)

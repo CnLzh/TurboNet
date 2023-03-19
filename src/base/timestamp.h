@@ -22,8 +22,8 @@ class Timestamp final
   using Duration = SystemLock::duration;
 
  public:
-  Timestamp();
-  explicit Timestamp(const Duration &time_since_epoch);
+  Timestamp() noexcept;
+  explicit Timestamp(const Duration &time_since_epoch) noexcept;
 
   static Timestamp Now();
 

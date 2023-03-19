@@ -17,7 +17,7 @@ namespace turbo {
 template<tb_s32 SIZE>
 class FixedBuffer final {
  public:
-  FixedBuffer() : cur_(data_) {};
+  FixedBuffer() noexcept: cur_(data_) {};
 
   void Append(const tb_s8 *buf, const tb_u64 &len) {
 	if (implicit_cast<tb_u64>(Avail()) > len) {

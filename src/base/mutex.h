@@ -15,8 +15,8 @@ namespace turbo {
 
 class MutexLock final {
  public:
-  MutexLock();
-  ~MutexLock();
+  MutexLock() noexcept;
+  ~MutexLock() noexcept;
 
   [[nodiscard]] bool IsLockedByThisThread() const;
   void AssertLocked() const;
@@ -29,10 +29,10 @@ class MutexLock final {
   friend class Condition;
   friend class MutexLockGuard;
 
-  class UnAssignGuard {
+  class UnAssignGuard final {
    public:
-	explicit UnAssignGuard(MutexLock &owner);
-	~UnAssignGuard();
+	explicit UnAssignGuard(MutexLock &owner) noexcept;
+	~UnAssignGuard() noexcept;
    private:
 	MutexLock &owner_;
 	DISALLOW_COPY_AND_ASSIGN(UnAssignGuard)

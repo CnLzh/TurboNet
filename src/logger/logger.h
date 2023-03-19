@@ -25,7 +25,7 @@ class Logger final {
   class SourceFile final {
    public:
 	template<tb_s32 N>
-	explicit SourceFile(const tb_s8 (&arr)[N])
+	explicit SourceFile(const tb_s8 (&arr)[N]) noexcept
 		: data_(arr),
 		  size_(N - 1) {
 	  const tb_s8 *slash = strrchr(data_, '/');
@@ -35,7 +35,7 @@ class Logger final {
 	  }
 	}
 
-	explicit SourceFile(const tb_s8 *file_name)
+	explicit SourceFile(const tb_s8 *file_name) noexcept
 		: data_(file_name) {
 	  const tb_s8 *slash = strrchr(data_, '/');
 	  if (slash) data_ = slash + 1;
@@ -49,15 +49,15 @@ class Logger final {
 
   Logger(SourceFile file, tb_s32 line);
   Logger(SourceFile file, LogLevel level);
-  Logger(SourceFile file, LogLevel level, const tb_s8* func);
+  Logger(SourceFile file, LogLevel level, const tb_s8 *func);
 
  private:
 
-  class Impl{
+  class Impl final {
    public:
 	using LogLevel = Logger::LogLevel;
 
-	Impl(LogLevel log_level, tb_s32 errno, const SourceFile& file, tb_s32 line);
+	Impl(LogLevel log_level, tb_s32 errno, const SourceFile &file, tb_s32 line) noexcept;
 	void FormatTime();
 
 	Timestamp timestamp_;

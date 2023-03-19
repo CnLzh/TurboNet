@@ -2,11 +2,11 @@
 
 namespace turbo {
 
-Timestamp::Timestamp()
+Timestamp::Timestamp() noexcept
 	: time_since_epoch_(0) {
 }
 
-Timestamp::Timestamp(const Duration &time_since_epoch)
+Timestamp::Timestamp(const Duration &time_since_epoch) noexcept
 	: time_since_epoch_(time_since_epoch) {
 }
 

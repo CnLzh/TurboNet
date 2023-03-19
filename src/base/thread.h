@@ -18,9 +18,9 @@ namespace turbo {
 class Thread final {
  public:
   using ThreadFunc = std::function<void()>;
-  explicit Thread(ThreadFunc func, std::string name = std::string());
+  explicit Thread(ThreadFunc func, std::string name = std::string()) noexcept;
 
-  ~Thread();
+  ~Thread() noexcept;
 
   void Start();
   void Join();

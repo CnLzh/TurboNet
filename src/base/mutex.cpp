@@ -4,11 +4,11 @@
 #include <cassert>
 namespace turbo {
 
-MutexLock::MutexLock()
+MutexLock::MutexLock() noexcept
 	: holder_(0) {
 }
 
-MutexLock::~MutexLock() {
+MutexLock::~MutexLock() noexcept {
   assert(holder_ == 0);
 }
 
@@ -42,12 +42,12 @@ std::mutex &MutexLock::GetMutex() {
   return mutex_;
 }
 
-MutexLock::UnAssignGuard::UnAssignGuard(MutexLock &owner)
+MutexLock::UnAssignGuard::UnAssignGuard(MutexLock &owner) noexcept
 	: owner_(owner) {
   owner_.UnAssignHolder();
 }
 
-MutexLock::UnAssignGuard::~UnAssignGuard() {
+MutexLock::UnAssignGuard::~UnAssignGuard() noexcept{
   owner_.AssignHolder();
 }
 
@@ -59,6 +59,5 @@ MutexLockGuard::MutexLockGuard(MutexLock &mutex)
 MutexLockGuard::~MutexLockGuard() {
   mutex_.UnLock();
 }
-
 
 }

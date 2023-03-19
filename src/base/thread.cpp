@@ -9,7 +9,7 @@ namespace turbo {
 
 std::atomic_int32_t Thread::num_created_(0);
 
-Thread::Thread(Thread::ThreadFunc func, std::string name)
+Thread::Thread(Thread::ThreadFunc func, std::string name) noexcept
 	: started_(false),
 	  joined_(false),
 	  tid_(0),
@@ -19,7 +19,7 @@ Thread::Thread(Thread::ThreadFunc func, std::string name)
   SetDefaultName();
 }
 
-Thread::~Thread() {
+Thread::~Thread() noexcept {
   if (started_ && !joined_)
 	thread_->detach();
 }
