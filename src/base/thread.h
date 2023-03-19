@@ -35,7 +35,7 @@ class Thread final {
   void SetDefaultName();
   bool started_;
   bool joined_;
-  std::shared_ptr<std::thread> thread_;
+  std::unique_ptr<std::thread> thread_;
   pid_t tid_;
   std::string name_;
   ThreadFunc func_;

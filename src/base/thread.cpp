@@ -27,15 +27,15 @@ Thread::~Thread() noexcept {
 void Thread::Start() {
   assert(!started_);
   started_ = true;
-  thread_ = std::make_shared<std::thread>(std::thread(
+  thread_ = std::make_unique<std::thread>(std::thread(
 	  [&]() {
 		tid_ = CurrentThread::CachedTid();
 		CurrentThread::t_thread_name = name_;
 		::prctl(PR_SET_NAME, CurrentThread::ThreadName().c_str());
 		latch_.CountDown();
 		try {
-		  func_();
 		  CurrentThread::t_thread_name = "finished";
+		  func_();
 		} catch (const std::exception &ex) {
 		  std::cerr << "exception caught in Thread " << CurrentThread::ThreadName()
 					<< std::endl << "reason: " << ex.what() << std::endl;
