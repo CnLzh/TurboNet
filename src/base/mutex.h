@@ -1,6 +1,9 @@
+// Copyright (C) 2023
+//
 // File:     mutex.h
-// Brief:    Encapsulation mutex.
+// Brief:    Encapsulation Mutex class.
 // Author:   CnLzh
+
 #ifndef TURBONET_SRC_BASE_MUTEX_H_
 #define TURBONET_SRC_BASE_MUTEX_H_
 
