@@ -10,6 +10,7 @@
 #include <type_traits>
 #include <cstdint>
 #include <cstring>
+#include <concepts>
 
 namespace turbo {
 
@@ -42,8 +43,13 @@ class EqualityComparable {
   friend bool operator!=(const T &lhs, const T &rhs) { return !lhs.EqualTo(rhs); };
 
   template<typename U = T>
-  auto EqualTo(const T &rhs) const
-  -> std::enable_if_t<std::is_same_v<decltype(std::declval<U>() == std::declval<U>()), bool>, bool> {
+  requires requires(U &&u){
+	{
+	std::declval<U>() == std::declval<U>()
+	}
+	-> std::convertible_to<bool>;
+  }
+  auto EqualTo(const T &rhs) const {
 	return static_cast<const U &>(*this) == static_cast<const U &>(rhs);
   }
 };
@@ -57,8 +63,13 @@ class LessThanComparable {
   friend bool operator>=(const T &lhs, const T &rhs) { return !(lhs < rhs); };
 
   template<typename U = T>
-  auto LessThan(const T &rhs) const
-  -> std::enable_if_t<std::is_same_v<decltype(std::declval<U>() == std::declval<U>()), bool>, bool> {
+  requires requires(U &&u){
+	{
+	std::declval<U>() == std::declval<U>()
+	}
+	-> std::convertible_to<bool>;
+  }
+  auto LessThan(const T &rhs) const {
 	return static_cast<const U &>(*this) < static_cast<const U &>(rhs);
   }
 };
