@@ -13,7 +13,7 @@
 
 namespace turbo {
 
-class MutexLock {
+class MutexLock final {
  public:
   MutexLock();
   ~MutexLock();
@@ -46,7 +46,7 @@ class MutexLock {
   DISALLOW_COPY_AND_ASSIGN(MutexLock)
 };
 
-class MutexLockGuard {
+class MutexLockGuard final {
  public:
   explicit MutexLockGuard(MutexLock &mutex);
   ~MutexLockGuard();

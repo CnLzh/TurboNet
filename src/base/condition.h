@@ -14,7 +14,7 @@
 
 namespace turbo {
 
-class Condition {
+class Condition final {
  public:
   explicit Condition(MutexLock& mutex);
   ~Condition();

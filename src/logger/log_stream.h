@@ -14,7 +14,7 @@ namespace turbo {
 const tb_s32 kSmallBuffer = 4000;
 const tb_s32 kLargeBuffer = 4000 * 1000;
 
-class LogStream {
+class LogStream final {
   using Self = LogStream;
   using Buffer = FixedBuffer<kSmallBuffer>;
 

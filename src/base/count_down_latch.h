@@ -12,7 +12,7 @@
 
 namespace turbo {
 
-class CountDownLatch {
+class CountDownLatch final {
  public:
   explicit CountDownLatch(const tb_s32 &count);
   void Wait();

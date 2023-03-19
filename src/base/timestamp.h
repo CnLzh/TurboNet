@@ -14,7 +14,7 @@
 
 namespace turbo {
 
-class Timestamp
+class Timestamp final
 	: public EqualityComparable<Timestamp>,
 	  public LessThanComparable<Timestamp> {
 

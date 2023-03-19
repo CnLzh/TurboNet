@@ -15,7 +15,7 @@
 #include <functional>
 namespace turbo {
 
-class Thread {
+class Thread final {
  public:
   using ThreadFunc = std::function<void()>;
   explicit Thread(ThreadFunc func, std::string name = std::string());

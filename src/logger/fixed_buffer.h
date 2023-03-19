@@ -15,7 +15,7 @@
 namespace turbo {
 
 template<tb_s32 SIZE>
-class FixedBuffer {
+class FixedBuffer final {
  public:
   FixedBuffer() : cur_(data_) {};
 

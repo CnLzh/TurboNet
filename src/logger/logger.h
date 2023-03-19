@@ -12,7 +12,7 @@
 
 namespace turbo {
 
-class Logger {
+class Logger final {
  public:
   enum LogLevel {
 	DEBUG,
@@ -22,7 +22,7 @@ class Logger {
 	FATAL,
   };
 
-  class SourceFile {
+  class SourceFile final {
    public:
 	template<tb_s32 N>
 	explicit SourceFile(const tb_s8 (&arr)[N])
