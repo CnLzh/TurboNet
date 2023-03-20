@@ -1,8 +1,6 @@
 #include "thread_pool.h"
 #include "current_thread.h"
 
-#include <cassert>
-
 namespace turbo {
 
 ThreadPool::ThreadPool(
@@ -26,6 +24,14 @@ ThreadPool::ThreadPool(
 	  idle_thread_num_(0),
 	  now_thread_num_(0) {
   InitThreadMonitor();
+  AddThread(kCorePoolSize_);
+}
+
+ThreadPool::~ThreadPool() noexcept {
+  monitor_cv_.Notify();
+  task_cv_.NotifyAll();
+  for (auto &it : thread_pool_)
+	it->Join();
 }
 
 void ThreadPool::AddThread(tb_u32 size) {
@@ -38,7 +44,7 @@ void ThreadPool::AddThread(tb_u32 size) {
 			Task task;
 			{
 			  MutexLockGuard task_lock(tasks_mutex_);
-			  while (thread_pool_status_ != TPS_TERMINATED && tasks_.empty()) {
+			  while (thread_pool_status_ == TPS_RUNNING && tasks_.empty()) {
 				if (task_cv_.WaitForSeconds(kIdleTimeoutSeconds_)) {
 				  if (now_thread_num_ > kCorePoolSize_) {
 					--idle_thread_num_;
@@ -50,22 +56,21 @@ void ThreadPool::AddThread(tb_u32 size) {
 				  }
 				}
 			  }
-			  if (thread_pool_status_ == TPS_TERMINATED && tasks_.empty()) {
+			  if (thread_pool_status_ != TPS_RUNNING && tasks_.empty()) {
+				thread_pool_status_ = TPS_TERMINATED;
 				--idle_thread_num_;
 				--now_thread_num_;
 				return;
 			  }
 			  task = std::move(tasks_.front());
 			  tasks_.pop_front();
-			  if (thread_pool_status_ == TPS_SHUTDOWN && tasks_.empty())
-				thread_pool_status_ = TPS_TERMINATED;
 			}
 			--idle_thread_num_;
 			task();
 			++idle_thread_num_;
 		  }
 		},
-		std::string("ThreadPool Work") + std::to_string(thread_pool_.size())
+		std::string("TP_Work") + std::to_string(now_thread_num_ + 1)
 	);
 	thread_pool_.emplace_back(std::move(thread));
 	++idle_thread_num_;
@@ -75,12 +80,13 @@ void ThreadPool::AddThread(tb_u32 size) {
 }
 
 void ThreadPool::InitThreadMonitor() {
-  Thread monitor(
+  thread_monitor_ = std::make_unique<Thread>(
 	  [this] {
 		while (true) {
 		  MutexLockGuard monitor_lock(monitor_mutex_);
 		  while (monitor_thread_free_.empty()) {
-			if (monitor_cv_.WaitForSeconds(kIdleTimeoutSeconds_) && thread_pool_status_ == TPS_TERMINATED)
+			monitor_cv_.Wait();
+			if (thread_pool_status_ != TPS_RUNNING)
 			  return;
 		  }
 		  auto it = monitor_thread_free_.begin();
@@ -103,9 +109,25 @@ void ThreadPool::InitThreadMonitor() {
 		  }
 		}
 	  },
-	  "ThreadPool Monitor"
+	  "TP_Monitor"
   );
-  monitor.Start();
+  thread_monitor_->Start();
+}
+
+std::string ThreadPool::Name() const {
+  return thread_pool_name_;
+}
+
+tb_u32 ThreadPool::IdleThreadCount() const {
+  return idle_thread_num_;
+}
+
+size_t ThreadPool::ThreadCount() const {
+  return now_thread_num_;
+}
+
+void ThreadPool::ShutDown() {
+  thread_pool_status_ = TPS_SHUTDOWN;
 }
 
 } // turbo

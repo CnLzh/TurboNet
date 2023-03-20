@@ -34,8 +34,8 @@ void Thread::Start() {
 		::prctl(PR_SET_NAME, CurrentThread::ThreadName().c_str());
 		latch_.CountDown();
 		try {
-		  CurrentThread::t_thread_name = "finished";
 		  func_();
+		  CurrentThread::t_thread_name = "finished";
 		} catch (const std::exception &ex) {
 		  std::cerr << "exception caught in Thread " << CurrentThread::ThreadName()
 					<< std::endl << "reason: " << ex.what() << std::endl;
@@ -50,7 +50,6 @@ void Thread::Start() {
 	latch_.Wait();
 	assert(tid_ > 0);
   }
-
 }
 
 void Thread::Join() {

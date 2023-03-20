@@ -29,3 +29,8 @@ add_test(NAME CountDownLatchTest COMMAND CountDownLatchTest)
 add_executable(ThreadTest thread_test.cpp)
 target_link_libraries(ThreadTest TurboNet)
 add_test(NAME ThreadTest COMMAND ThreadTest)
+
+# thread_pool test
+add_executable(ThreadPoolTest thread_pool_test.cpp)
+target_link_libraries(ThreadPoolTest TurboNet)
+add_test(NAME ThreadPoolTest COMMAND ThreadPoolTest)

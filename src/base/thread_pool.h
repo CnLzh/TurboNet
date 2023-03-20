@@ -16,6 +16,8 @@
 #include <list>
 #include <memory>
 #include <deque>
+#include <future>
+#include <cassert>
 
 namespace turbo {
 
@@ -51,6 +53,8 @@ class ThreadPool final {
   std::atomic<tb_u32> idle_thread_num_;
   std::atomic<tb_u32> now_thread_num_;
 
+  std::unique_ptr<Thread> thread_monitor_;
+
  public:
   explicit ThreadPool(
 	  std::string thread_pool_name = "ThreadPool",
@@ -59,11 +63,57 @@ class ThreadPool final {
 	  const tb_u32 &max_task_size = 1000,
 	  const tb_f64 &idle_timeout_seconds = 120
   ) noexcept;
+
+  ~ThreadPool() noexcept;
+
+  template<typename F, typename ... Args>
+  auto Commit(F &&f, Args &&... args) -> std::future<decltype(f(args...))>;
+
+  std::string Name() const;
+
+  tb_u32 IdleThreadCount() const;
+
+  size_t ThreadCount() const;
+
+  void ShutDown();
+
  private:
   void AddThread(tb_u32 size = 1);
   void InitThreadMonitor();
   DISALLOW_COPY_AND_ASSIGN(ThreadPool)
 };
+
+template<typename F, typename ... Args>
+auto ThreadPool::Commit(F &&f, Args &&...args) -> std::future<decltype(f(args...))> {
+  assert(thread_pool_status_ == TPS_RUNNING);
+
+  using RetType = decltype(f(args...));
+
+  auto task = std::make_shared<std::packaged_task<RetType()>>(
+	  std::bind(std::forward<F>(f), std::forward<Args>(args)...)
+  );
+
+  std::future<RetType> result = task->get_future();
+
+  {
+	MutexLockGuard task_lock(tasks_mutex_);
+	if (kMaxTaskSize_ > tasks_.size()) {
+	  tasks_.emplace_back(
+		  [task]() {
+			(*task)();
+		  });
+	} else {
+	  AddThread();
+	  tasks_.emplace_back(
+		  [task]() {
+			(*task)();
+		  });
+	}
+  }
+  task_cv_.Notify();
+
+  return result;
+}
 
 } // turbo
 
