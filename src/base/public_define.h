@@ -58,9 +58,9 @@ class EqualityComparable {
 // derived must implement operator "<"
 template<typename T>
 class LessThanComparable {
-  friend bool operator>(const T &lhs, const T &rhs) { return rhs < lhs; };
-  friend bool operator<=(const T &lhs, const T &rhs) { return !(rhs < lhs); };
-  friend bool operator>=(const T &lhs, const T &rhs) { return !(lhs < rhs); };
+  friend bool operator>(const T &lhs, const T &rhs) { return rhs.LessThan(lhs); };
+  friend bool operator<=(const T &lhs, const T &rhs) { return !(rhs.LessThan(lhs)); };
+  friend bool operator>=(const T &lhs, const T &rhs) { return !(lhs.LessThan(rhs)); };
 
   template<typename U = T>
   requires requires(U &&u){
