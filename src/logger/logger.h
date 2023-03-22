@@ -42,21 +42,20 @@ class Logger final {
 	  size_ = static_cast<tb_s32>(strlen(data_));
 	}
 
-   private:
 	const char *data_;
 	tb_s32 size_;
   };
 
   Logger(SourceFile file, tb_s32 line);
-  Logger(SourceFile file, LogLevel level);
-  Logger(SourceFile file, LogLevel level, const tb_s8 *func);
-#if 0
+  Logger(SourceFile file, tb_s32 line, LogLevel level);
+  Logger(SourceFile file, tb_s32 line, LogLevel level, const tb_s8 *func);
+
   LogStream &Stream();
-#endif
+
   static LogLevel GetLogLevel();
   static void SetLogLevel(const LogLevel &level);
 
-  using OutputFunc = void (*)(const char *msg, int len);
+  using OutputFunc = void (*)(const tb_s8 *msg, tb_s32 len);
   using FlushFunc = void (*)();
 
   static void SetOutput(OutputFunc);
@@ -70,6 +69,7 @@ class Logger final {
 
 	Impl(LogLevel log_level, tb_s32 errno, const SourceFile &file, tb_s32 line) noexcept;
 	void FormatTime();
+	void Finish();
 
 	Timestamp timestamp_;
 	LogLevel log_level_;
@@ -77,11 +77,12 @@ class Logger final {
 	tb_s32 line_;
 	SourceFile source_file_;
   };
-#if 0
+
   Impl impl_;
 
-  static LogLevel log_level_;
-#endif
+  static LogLevel s_log_level_;
+  static OutputFunc s_output_;
+  static FlushFunc s_flush_;
   DISALLOW_COPY_AND_ASSIGN(Logger)
 };
 
