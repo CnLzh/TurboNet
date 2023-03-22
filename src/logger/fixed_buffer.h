@@ -35,7 +35,7 @@ class FixedBuffer final {
   [[nodiscard]] tb_s32 Avail() const { return static_cast<int>(End() - cur_); };
 
   void Reset() { cur_ = data_; };
-  void BZero() { bzero(data_, sizeof(data_)); };
+  void BZero() { MemZero(data_, sizeof(data_)); };
 
   [[nodiscard]] std::string ToString() const { return std::string(data_, Length()); };
 
