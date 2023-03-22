@@ -15,32 +15,31 @@ const tb_s32 kSmallBuffer = 4000;
 const tb_s32 kLargeBuffer = 4000 * 1000;
 
 class LogStream final {
-  using Self = LogStream;
+ public:
   using Buffer = FixedBuffer<kSmallBuffer>;
 
- public:
   LogStream() = default;
-  void Append(const tb_s8* data, tb_s32 len);
+  void Append(const tb_s8 *data, tb_s32 len);
   void ResetBuffer();
-  [[nodiscard]] const Buffer& GetBuffer() const;
+  [[nodiscard]] const Buffer &GetBuffer() const;
 
-  Self &operator<<(bool);
-  Self &operator<<(short);
-  Self &operator<<(unsigned short);
-  Self &operator<<(int);
-  Self &operator<<(unsigned int);
-  Self &operator<<(long);
-  Self &operator<<(unsigned long);
-  Self &operator<<(long long);
-  Self &operator<<(unsigned long long);
-  Self &operator<<(float);
-  Self &operator<<(double);
-  Self &operator<<(char);
-  Self &operator<<(const char *);
-  Self &operator<<(const unsigned char *);
-  Self &operator<<(const void *);
-  Self &operator<<(const std::string &);
-  Self &operator<<(const Buffer &);
+  LogStream &operator<<(bool);
+  LogStream &operator<<(short);
+  LogStream &operator<<(unsigned short);
+  LogStream &operator<<(int);
+  LogStream &operator<<(unsigned int);
+  LogStream &operator<<(long);
+  LogStream &operator<<(unsigned long);
+  LogStream &operator<<(long long);
+  LogStream &operator<<(unsigned long long);
+  LogStream &operator<<(float);
+  LogStream &operator<<(double);
+  LogStream &operator<<(char);
+  LogStream &operator<<(const char *);
+  LogStream &operator<<(const unsigned char *);
+  LogStream &operator<<(const void *);
+  LogStream &operator<<(const std::string &);
+  LogStream &operator<<(const Buffer &);
 
  private:
   template<typename T>

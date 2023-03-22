@@ -12,14 +12,25 @@
 
 namespace turbo {
 
+#define LOG_DEBUG  if(turbo::Logger::GetLogLevel() <= turbo::Logger::DEBUG)  \
+    turbo::Logger(__FILE__, __LINE__, __func__).Stream()
+#define LOG_INFO  if(turbo::Logger::GetLogLevel() <= turbo::Logger::INFO)  \
+    turbo::Logger(__FILE__, __LINE__).Stream()
+#define LOG_WARN  turbo::Logger(__FILE__, __LINE__, turbo::Logger::WARN).Stream()
+#define LOG_ERROR  turbo::Logger(__FILE__, __LINE__, turbo::Logger::ERROR).Stream()
+#define LOG_FATAL  turbo::Logger(__FILE__, __LINE__, turbo::Logger::FATAL).Stream()
+#define LOG_SYS_ERROR  turbo::Logger(__FILE__, __LINE__, false).Stream()
+#define LOG_SYS_FATAL  turbo::Logger(__FILE__, __LINE__, true).Stream()
+
 class Logger final {
  public:
   enum LogLevel {
 	DEBUG,
 	INFO,
-	WARNING,
+	WARN,
 	ERROR,
 	FATAL,
+	NUM_LOG_LEVELS,
   };
 
   class SourceFile final {
@@ -46,9 +57,12 @@ class Logger final {
 	tb_s32 size_;
   };
 
-  Logger(SourceFile file, tb_s32 line);
-  Logger(SourceFile file, tb_s32 line, LogLevel level);
-  Logger(SourceFile file, tb_s32 line, LogLevel level, const tb_s8 *func);
+  Logger(const tb_s8 *file, tb_s32 line);
+  Logger(const tb_s8 *file, tb_s32 line, const tb_s8 *func);
+  Logger(const tb_s8 *file, tb_s32 line, LogLevel level);
+  Logger(const tb_s8 *file, tb_s32 line, bool is_abort);
+
+  ~Logger();
 
   LogStream &Stream();
 
@@ -67,7 +81,7 @@ class Logger final {
    public:
 	using LogLevel = Logger::LogLevel;
 
-	Impl(LogLevel log_level, tb_s32 errno, const SourceFile &file, tb_s32 line) noexcept;
+	Impl(LogLevel log_level, tb_s32 errno_info, const tb_s8 *file, tb_s32 line) noexcept;
 	void FormatTime();
 	void Finish();
 
