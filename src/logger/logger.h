@@ -50,9 +50,9 @@ class Logger final {
   Logger(SourceFile file, tb_s32 line);
   Logger(SourceFile file, LogLevel level);
   Logger(SourceFile file, LogLevel level, const tb_s8 *func);
-
+#if 0
   LogStream &Stream();
-
+#endif
   static LogLevel GetLogLevel();
   static void SetLogLevel(const LogLevel &level);
 
@@ -63,8 +63,6 @@ class Logger final {
   static void SetFlush(FlushFunc);
 
  private:
-
-
 
   class Impl final {
    public:
@@ -79,11 +77,11 @@ class Logger final {
 	tb_s32 line_;
 	SourceFile source_file_;
   };
-
+#if 0
   Impl impl_;
 
   static LogLevel log_level_;
-
+#endif
   DISALLOW_COPY_AND_ASSIGN(Logger)
 };
 

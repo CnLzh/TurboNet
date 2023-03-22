@@ -14,16 +14,23 @@ Logger::Logger(SourceFile file, LogLevel level, const tb_s8 *func) {
 
 }
 
+#if 0
 LogStream &Logger::Stream() {
   return impl_.log_stream_;
 }
+#endif
 
 Logger::LogLevel Logger::GetLogLevel() {
+  return Logger::LogLevel::INFO;
+#if 0
   return Logger::log_level_;
+#endif
 }
 
 void Logger::SetLogLevel(const LogLevel& level) {
+#if 0
   Logger::log_level_ = level;
+#endif
 }
 
 void Logger::SetOutput(Logger::OutputFunc) {
