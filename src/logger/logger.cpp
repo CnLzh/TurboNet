@@ -1,12 +1,11 @@
 #include "logger.h"
 #include "current_thread.h"
 
+#include <iostream>
 namespace turbo {
 
 thread_local tb_s64 t_last_seconds = 0;
-thread_local std::chrono::system_clock::duration t_last_time;
 thread_local std::string t_time_str;
-thread_local tb_s8 t_errno_buf[512];
 
 inline LogStream &operator<<(LogStream &s, const Logger::SourceFile &v) {
   s.Append(v.data_, v.size_);
@@ -14,15 +13,15 @@ inline LogStream &operator<<(LogStream &s, const Logger::SourceFile &v) {
 }
 
 void DefaultOutput(const tb_s8 *msg, tb_s32 len) {
-  fwrite(msg, sizeof(tb_s8), len, stdout);
+  std::fwrite(msg, sizeof(tb_s8), len, stdout);
 }
 
 void DefaultFlush() {
-  fflush(stdout);
+  std::cout.flush();
 }
 
-const tb_s8 *SterrorR(tb_s32 errno_info) {
-  return strerror_r(errno_info, t_errno_buf, sizeof(t_errno_buf));
+const tb_s8 *StrErrorR(tb_s32 errno_info) {
+  return std::strerror(errno_info);
 }
 
 Logger::LogLevel Logger::s_log_level_ = Logger::LogLevel::INFO;
@@ -100,7 +99,7 @@ Logger::Impl::Impl(LogLevel log_level,
 			  << source_file_ << ':' << line_ << ": ";
   // if(errno_info) stream << info
   if (errno_info != 0) {
-	log_stream_ << SterrorR(errno_info) << " (errno=" << errno_info << ") ";
+	log_stream_ << StrErrorR(errno_info) << " (errno=" << errno_info << ") ";
   }
 }
 
