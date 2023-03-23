@@ -14,6 +14,7 @@ namespace turbo::CurrentThread{
 
 extern thread_local pid_t t_cached_tid;
 extern thread_local std::string t_tid_string;
+extern thread_local size_t t_tid_string_length;
 extern thread_local std::string t_thread_name;
 
 void ConstructTid();
@@ -25,6 +26,10 @@ inline pid_t CachedTid(){
 
 inline std::string TidString(){
   return t_tid_string;
+}
+
+inline size_t TidStringLength(){
+  return t_tid_string_length;
 }
 
 inline std::string ThreadName(){

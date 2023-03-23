@@ -22,6 +22,8 @@ namespace turbo {
 #define LOG_SYS_ERROR  turbo::Logger(__FILE__, __LINE__, false).Stream()
 #define LOG_SYS_FATAL  turbo::Logger(__FILE__, __LINE__, true).Stream()
 
+const tb_s8 *StrErrorR(tb_s32 errno_info);
+
 class Logger final {
  public:
   enum LogLevel {

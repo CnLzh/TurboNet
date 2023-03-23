@@ -1,7 +1,7 @@
 // copyright (c) 2023
 //
-// file:     log_file.h
-// brief:    logfile class.
+// file:     file_util.h
+// brief:    FileUtil class.
 // author:   CnLzh
 
 #ifndef TURBONET_SRC_LOGGER_FILE_UTIL_H_
@@ -10,15 +10,20 @@
 #include "public_define.h"
 
 #include <string>
-#include <fstream>
 namespace turbo {
 
 class FileUtil {
  public:
   explicit FileUtil(const std::string &file_name);
   ~FileUtil();
+
+  void Append(const tb_s8 *data, const size_t &len);
+  void Flush();
+  [[nodiscard]] off_t WrittenBytes() const;
+
  private:
-  std::fstream file_;
+  size_t Write(const tb_s8 *data, const size_t &len);
+  FILE *fp_;
   off_t written_bytes_;
   // 64KB buffer
   tb_s8 buffer_[64 * 1024]{};

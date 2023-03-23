@@ -1,11 +1,32 @@
 #include "logger.h"
 #include "current_thread.h"
 
-#include <iostream>
 namespace turbo {
+
+// know string length at compile time
+class T {
+ public:
+  template<size_t N>
+  constexpr explicit T(const tb_s8(&str)[N])
+	  : str_(str),
+		len_(N - 1) {}
+
+  constexpr explicit T(const tb_s8 *str, const size_t &len)
+	  : str_(str),
+		len_(len) {}
+
+  const char *str_;
+  const size_t len_;
+};
+
+inline LogStream &operator<<(LogStream &s, T v) {
+  s.Append(v.str_, v.len_);
+  return s;
+}
 
 thread_local tb_s64 t_last_seconds = 0;
 thread_local std::string t_time_str;
+thread_local tb_s8 t_erno_buf[512];
 
 inline LogStream &operator<<(LogStream &s, const Logger::SourceFile &v) {
   s.Append(v.data_, v.size_);
@@ -13,22 +34,23 @@ inline LogStream &operator<<(LogStream &s, const Logger::SourceFile &v) {
 }
 
 void DefaultOutput(const tb_s8 *msg, tb_s32 len) {
-  std::fwrite(msg, sizeof(tb_s8), len, stdout);
+  ::fwrite(msg, 1, len, stdout);
 }
 
 void DefaultFlush() {
-  std::cout.flush();
+  ::fflush(stdout);
 }
 
 const tb_s8 *StrErrorR(tb_s32 errno_info) {
-  return std::strerror(errno_info);
+  strerror_r(errno_info, t_erno_buf, sizeof(t_erno_buf));
+  return t_erno_buf;
 }
 
 Logger::LogLevel Logger::s_log_level_ = Logger::LogLevel::INFO;
 Logger::OutputFunc Logger::s_output_ = DefaultOutput;
 Logger::FlushFunc Logger::s_flush_ = DefaultFlush;
 
-const std::string kLogLevelName[Logger::LogLevel::NUM_LOG_LEVELS] = {
+const tb_s8 *kLogLevelName[Logger::LogLevel::NUM_LOG_LEVELS] = {
 	"DEBUG ",
 	"INFO  ",
 	"WARN  ",
@@ -95,11 +117,12 @@ Logger::Impl::Impl(LogLevel log_level,
   // stream << timestamp << thread info << LogLevel << SourceFile << Line
   FormatTime();
   CurrentThread::CachedTid();
-  log_stream_ << " - thread:" << CurrentThread::TidString() << " - " << kLogLevelName[log_level]
-			  << source_file_ << ':' << line_ << ": ";
+  log_stream_ << T(" - thread:") << T(CurrentThread::TidString().c_str(), CurrentThread::TidStringLength()) << T(" - ")
+			  << T(kLogLevelName[log_level], 6)
+			  << source_file_ << ':' << line_ << T(": ");
   // if(errno_info) stream << info
   if (errno_info != 0) {
-	log_stream_ << StrErrorR(errno_info) << " (errno=" << errno_info << ") ";
+	log_stream_ << StrErrorR(errno_info) << T(" (errno=") << errno_info << T(") ");
   }
 }
 
@@ -114,7 +137,7 @@ void Logger::Impl::FormatTime() {
   tb_s8 buf[8];
   snprintf(buf, sizeof(buf), ".%06lld", microseconds % kMicroSecondsPerSecond);
 
-  log_stream_ << t_time_str << buf;
+  log_stream_ << T(t_time_str.c_str(), 19) << T(buf);
 }
 
 void Logger::Impl::Finish() {
