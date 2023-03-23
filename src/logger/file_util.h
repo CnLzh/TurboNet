@@ -10,12 +10,18 @@
 #include "public_define.h"
 
 #include <string>
+#include <fstream>
 namespace turbo {
 
 class FileUtil {
  public:
-  explicit FileUtil(std::string file_name);
+  explicit FileUtil(const std::string &file_name);
+  ~FileUtil();
  private:
+  std::fstream file_;
+  off_t written_bytes_;
+  // 64KB buffer
+  tb_s8 buffer_[64 * 1024]{};
   DISALLOW_COPY_AND_ASSIGN(FileUtil)
 };
 
