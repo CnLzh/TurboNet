@@ -59,10 +59,10 @@ class Logger final {
 	tb_s32 size_;
   };
 
-  Logger(const tb_s8 *file, tb_s32 line);
-  Logger(const tb_s8 *file, tb_s32 line, const tb_s8 *func);
-  Logger(const tb_s8 *file, tb_s32 line, LogLevel level);
-  Logger(const tb_s8 *file, tb_s32 line, bool is_abort);
+  Logger(const tb_s8 *file, tb_s32 line) noexcept;
+  Logger(const tb_s8 *file, tb_s32 line, const tb_s8 *func) noexcept;
+  Logger(const tb_s8 *file, tb_s32 line, LogLevel level) noexcept;
+  Logger(const tb_s8 *file, tb_s32 line, bool is_abort) noexcept;
 
   ~Logger();
 

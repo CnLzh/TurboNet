@@ -7,11 +7,11 @@ namespace turbo {
 class T {
  public:
   template<size_t N>
-  constexpr explicit T(const tb_s8(&str)[N])
+  constexpr explicit T(const tb_s8(&str)[N]) noexcept
 	  : str_(str),
 		len_(N - 1) {}
 
-  constexpr explicit T(const tb_s8 *str, const size_t &len)
+  constexpr explicit T(const tb_s8 *str, const size_t &len) noexcept
 	  : str_(str),
 		len_(len) {}
 
@@ -58,20 +58,20 @@ const tb_s8 *kLogLevelName[Logger::LogLevel::NUM_LOG_LEVELS] = {
 	"FATAL ",
 };
 
-Logger::Logger(const tb_s8 *file, tb_s32 line, const tb_s8 *func)
+Logger::Logger(const tb_s8 *file, tb_s32 line, const tb_s8 *func) noexcept
 	: impl_(DEBUG, 0, file, line) {
   impl_.log_stream_ << "(" << func << "): ";
 }
 
-Logger::Logger(const tb_s8 *file, tb_s32 line)
+Logger::Logger(const tb_s8 *file, tb_s32 line) noexcept
 	: impl_(INFO, 0, file, line) {
 }
 
-Logger::Logger(const tb_s8 *file, tb_s32 line, LogLevel level)
+Logger::Logger(const tb_s8 *file, tb_s32 line, LogLevel level) noexcept
 	: impl_(level, 0, file, line) {
 }
 
-Logger::Logger(const tb_s8 *file, tb_s32 line, bool is_abort)
+Logger::Logger(const tb_s8 *file, tb_s32 line, bool is_abort) noexcept
 	: impl_(is_abort ? ERROR : FATAL, errno, file, line) {
 }
 
@@ -110,10 +110,10 @@ Logger::Impl::Impl(LogLevel log_level,
 				   const tb_s8 *file,
 				   tb_s32 line) noexcept
 	: timestamp_(Timestamp::Now()),
-	  log_stream_(),
 	  log_level_(log_level),
-	  source_file_(file),
-	  line_(line) {
+	  log_stream_(),
+	  line_(line),
+	  source_file_(file) {
   // stream << timestamp << thread info << LogLevel << SourceFile << Line
   FormatTime();
   CurrentThread::CachedTid();
@@ -127,13 +127,13 @@ Logger::Impl::Impl(LogLevel log_level,
 }
 
 void Logger::Impl::FormatTime() {
-  auto seconds = std::chrono::duration_cast<std::chrono::seconds>(timestamp_.TimeSinceEpoch()).count();
+  auto seconds = timestamp_.TimeSinceEpochSeconds().count();
   if (t_last_seconds != seconds) {
 	t_last_seconds = seconds;
 	t_time_str = timestamp_.ToFormatString(false);
   }
 
-  auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(timestamp_.TimeSinceEpoch()).count();
+  auto microseconds = timestamp_.TimeSinceEpochMicroSeconds().count();
   tb_s8 buf[8];
   snprintf(buf, sizeof(buf), ".%06lld", microseconds % kMicroSecondsPerSecond);
 

@@ -10,7 +10,9 @@
 #include <type_traits>
 #include <cstdint>
 #include <cstring>
+#include <string>
 #include <concepts>
+#include <csignal>
 
 namespace turbo {
 
@@ -83,6 +85,21 @@ inline void MemZero(void *p, size_t len) {
 template<typename To, typename From>
 inline To implicit_cast(From const &f) {
   return f;
+}
+
+// TODO: create ProcessInfo implement it.
+inline std::string GetHostName() {
+  char host_name[256];
+  if (::gethostname(host_name, sizeof(host_name)) == 0)
+	host_name[sizeof(host_name) - 1] = '\0';
+  else
+	return "Unknown Host";
+  return host_name;
+}
+
+// TODO: create ProcessInfo implement it.
+inline std::string GetPid(){
+  return std::to_string(::getpid());
 }
 
 static const tb_s64 kMicroSecondsPerSecond = 1000 * 1000;

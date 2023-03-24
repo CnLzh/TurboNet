@@ -43,5 +43,18 @@ std::chrono::system_clock::duration Timestamp::TimeSinceEpoch() const {
   return time_since_epoch_;
 }
 
+std::chrono::days Timestamp::TimeSinceEpochDays() const {
+  return std::chrono::duration_cast<std::chrono::days>(time_since_epoch_);
+}
+
+std::chrono::seconds Timestamp::TimeSinceEpochSeconds() const {
+  return std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch_);
+}
+
+std::chrono::microseconds Timestamp::TimeSinceEpochMicroSeconds() const {
+  return std::chrono::duration_cast<std::chrono::microseconds>(time_since_epoch_);
+}
+
+
 }
 

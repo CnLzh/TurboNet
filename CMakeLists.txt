@@ -7,6 +7,8 @@ project(TurboNet)
 # 指定C++编译器使用的C++标准版本
 set(CMAKE_CXX_STANDARD 20)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+
 # 指定编译器包含目录
 include_directories(
         ${PROJECT_SOURCE_DIR}/src/base
@@ -40,10 +42,10 @@ install(
 # 不指定默认release
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
-endif()
+endif ()
 
 # 仅在debug下编译单元测试
-if(CMAKE_BUILD_TYPE MATCHES "Debug")
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
     enable_testing()
     add_subdirectory(${PROJECT_SOURCE_DIR}/src/base/test)
 endif ()

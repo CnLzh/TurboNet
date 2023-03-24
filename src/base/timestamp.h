@@ -32,6 +32,12 @@ class Timestamp final
 
   [[nodiscard]] Duration TimeSinceEpoch() const;
 
+  [[nodiscard]] std::chrono::days TimeSinceEpochDays() const;
+
+  [[nodiscard]] std::chrono::seconds TimeSinceEpochSeconds() const;
+
+  [[nodiscard]] std::chrono::microseconds TimeSinceEpochMicroSeconds() const;
+
  private:
   Duration time_since_epoch_;
 };

@@ -2,13 +2,13 @@
 #include "logger.h"
 namespace turbo {
 
-FileUtil::FileUtil(const std::string &file_name)
+FileUtil::FileUtil(const std::string &file_name) noexcept
 	: fp_(::fopen(file_name.c_str(), "ae")),
 	  written_bytes_(0) {
   ::setbuffer(fp_, buffer_, sizeof(buffer_));
 }
 
-FileUtil::~FileUtil() {
+FileUtil::~FileUtil() noexcept {
   ::fclose(fp_);
 }
 

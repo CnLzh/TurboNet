@@ -14,8 +14,8 @@ namespace turbo {
 
 class FileUtil {
  public:
-  explicit FileUtil(const std::string &file_name);
-  ~FileUtil();
+  explicit FileUtil(const std::string &file_name) noexcept;
+  ~FileUtil() noexcept;
 
   void Append(const tb_s8 *data, const size_t &len);
   void Flush();

@@ -3,9 +3,9 @@
 namespace turbo {
 
 CountDownLatch::CountDownLatch(const tb_s32 &count) noexcept
-	: count_(count),
-	  mutex_(),
-	  cond_(mutex_) {
+	: mutex_(),
+	  cond_(mutex_),
+	  count_(count) {
 
 }
 

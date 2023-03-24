@@ -13,9 +13,9 @@ Thread::Thread(Thread::ThreadFunc func, std::string name) noexcept
 	: started_(false),
 	  joined_(false),
 	  tid_(0),
+	  func_(std::move(func)),
 	  name_(std::move(name)),
-	  latch_(1),
-	  func_(std::move(func)) {
+	  latch_(1) {
   SetDefaultName();
 }
 

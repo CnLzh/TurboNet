@@ -37,8 +37,8 @@ class Thread final {
   bool joined_;
   std::unique_ptr<std::thread> thread_;
   pid_t tid_;
-  std::string name_;
   ThreadFunc func_;
+  std::string name_;
   CountDownLatch latch_;
   static std::atomic_int32_t num_created_;
   DISALLOW_COPY_AND_ASSIGN(Thread)
