@@ -17,7 +17,7 @@ namespace turbo {
 template<tb_s32 SIZE>
 class FixedBuffer final {
  public:
-  FixedBuffer() noexcept: cur_(data_) {};
+  FixedBuffer() noexcept: data_(), cur_(data_) {};
 
   void Append(const tb_s8 *buf, const tb_u64 &len) {
 	if (implicit_cast<tb_u64>(Avail()) > len) {
@@ -42,7 +42,7 @@ class FixedBuffer final {
  private:
   [[nodiscard]] const tb_s8 *End() const { return data_ + sizeof(data_); };
 
-  tb_s8 data_[SIZE] = {};
+  tb_s8 data_[SIZE];
   tb_s8 *cur_ = nullptr;
 
   DISALLOW_COPY_AND_ASSIGN(FixedBuffer)
