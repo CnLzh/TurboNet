@@ -21,7 +21,7 @@ class AsyncLogging {
  public:
   AsyncLogging(std::string base_name,
 			   const off_t &roll_size,
-			   const int &flush_interval = 3);
+			   const int &flush_interval = 3) noexcept;
   ~AsyncLogging();
 
   void Start();

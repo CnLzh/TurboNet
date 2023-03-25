@@ -8,7 +8,7 @@ namespace turbo {
 
 AsyncLogging::AsyncLogging(std::string base_name,
 						   const off_t &roll_size,
-						   const int &flush_interval)
+						   const int &flush_interval) noexcept
 	: flush_interval_(flush_interval),
 	  running_(false),
 	  base_name_(std::move(base_name)),
