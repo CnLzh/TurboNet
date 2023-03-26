@@ -10,6 +10,8 @@
 #include "timestamp.h"
 #include "log_stream.h"
 
+#include <functional>
+
 namespace turbo {
 
 #define LOG_DEBUG  if(turbo::Logger::GetLogLevel() <= turbo::Logger::DEBUG)  \
@@ -21,8 +23,6 @@ namespace turbo {
 #define LOG_FATAL  turbo::Logger(__FILE__, __LINE__, turbo::Logger::FATAL).Stream()
 #define LOG_SYS_ERROR  turbo::Logger(__FILE__, __LINE__, false).Stream()
 #define LOG_SYS_FATAL  turbo::Logger(__FILE__, __LINE__, true).Stream()
-
-const tb_s8 *StrErrorR(tb_s32 errno_info);
 
 class Logger final {
  public:
@@ -77,6 +77,11 @@ class Logger final {
   static void SetOutput(OutputFunc);
   static void SetFlush(FlushFunc);
 
+  static void SetDefaultSingletonAsyncLogging(const tb_s8 *base_name = "TurboNet",
+											  const off_t &roll_size = 512 * 1024 * 1024);
+  static void StartDefaultSingletonAsyncLogging();
+  static void StopDefaultSingletonAsyncLogging();
+
  private:
 
   class Impl final {
@@ -101,6 +106,8 @@ class Logger final {
   static FlushFunc s_flush_;
   DISALLOW_COPY_AND_ASSIGN(Logger)
 };
+
+const tb_s8 *StrErrorR(tb_s32 errno_info);
 
 } // turbo
 

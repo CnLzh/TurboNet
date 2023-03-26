@@ -1,5 +1,9 @@
 #include "logger.h"
+
+#include <utility>
 #include "current_thread.h"
+#include "singleton.h"
+#include "async_logging.h"
 
 namespace turbo {
 
@@ -28,6 +32,9 @@ thread_local tb_s64 t_last_seconds = 0;
 thread_local std::string t_time_str;
 thread_local tb_s8 t_erno_buf[512];
 
+static AsyncLogging *g_async_logging = nullptr;
+static std::atomic<bool> g_is_default_async_started = false;
+
 inline LogStream &operator<<(LogStream &s, const Logger::SourceFile &v) {
   s.Append(v.data_, v.size_);
   return s;
@@ -39,6 +46,10 @@ void DefaultOutput(const tb_s8 *msg, tb_s32 len) {
 
 void DefaultFlush() {
   ::fflush(stdout);
+}
+
+void DefaultAsyncLoggingOutput(const tb_s8 *msg, tb_s32 len) {
+  g_async_logging->Append(msg, len);
 }
 
 const tb_s8 *StrErrorR(tb_s32 errno_info) {
@@ -103,6 +114,27 @@ void Logger::SetOutput(Logger::OutputFunc func) {
 
 void Logger::SetFlush(Logger::FlushFunc func) {
   s_flush_ = func;
+}
+
+void Logger::SetDefaultSingletonAsyncLogging(const tb_s8 *base_name, const off_t &roll_size) {
+  g_async_logging = &Singleton<AsyncLogging>::Instance(base_name, roll_size);
+  SetOutput(DefaultAsyncLoggingOutput);
+}
+
+void Logger::StartDefaultSingletonAsyncLogging() {
+  assert(g_async_logging);
+  if (!g_is_default_async_started) {
+	g_async_logging->Start();
+	g_is_default_async_started = true;
+  }
+}
+
+void Logger::StopDefaultSingletonAsyncLogging() {
+  assert(g_async_logging);
+  if (g_is_default_async_started) {
+	g_async_logging->Stop();
+	g_is_default_async_started = false;
+  }
 }
 
 Logger::Impl::Impl(LogLevel log_level,
