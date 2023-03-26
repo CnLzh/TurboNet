@@ -18,12 +18,14 @@ include_directories(
 # 指定目录下的源文件
 aux_source_directory(${PROJECT_SOURCE_DIR}/src/base SRC_BASE)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src/logger SRC_LOG)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/net SRC_NET)
 
 # 生成动态库
 add_library(
         TurboNet SHARED
         ${SRC_BASE}
         ${SRC_LOG}
+        ${SRC_NET}
 )
 
 # 设置生成的动态库路径
