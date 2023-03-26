@@ -11,15 +11,15 @@
 
 namespace turbo {
 
-const tb_s32 kSmallBuffer = 4000;
-const tb_s32 kLargeBuffer = 4000 * 1000;
+const int kSmallBuffer = 4000;
+const int kLargeBuffer = 4000 * 1000;
 
 class LogStream final {
  public:
   using Buffer = FixedBuffer<kSmallBuffer>;
 
   LogStream() = default;
-  void Append(const tb_s8 *data, tb_u64 len);
+  void Append(const char *data, unsigned long long len);
   void ResetBuffer();
   [[nodiscard]] const Buffer &GetBuffer() const;
 
@@ -45,7 +45,7 @@ class LogStream final {
   template<typename T>
   void FormatInteger(T);
 
-  static const tb_s32 kMaxNumericSize = 48;
+  static const unsigned int kMaxNumericSize = 48;
 
   Buffer buffer_;
 

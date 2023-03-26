@@ -14,15 +14,15 @@ namespace turbo {
 
 class CountDownLatch final {
  public:
-  explicit CountDownLatch(const tb_s32 &count) noexcept;
+  explicit CountDownLatch(int count) noexcept;
   void Wait();
   void CountDown();
-  tb_s32 GetCount() const;
+  int GetCount() const;
 
  private:
   mutable MutexLock mutex_;
   Condition cond_;
-  tb_s32 count_;
+  int count_;
   DISALLOW_COPY_AND_ASSIGN(CountDownLatch)
 
 };

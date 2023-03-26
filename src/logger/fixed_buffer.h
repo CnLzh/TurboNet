@@ -14,25 +14,25 @@
 
 namespace turbo {
 
-template<tb_s32 SIZE>
+template<int SIZE>
 class FixedBuffer final {
  public:
   FixedBuffer() noexcept: data_(), cur_(data_) {};
 
-  void Append(const tb_s8 *buf, const tb_u64 &len) {
-	if (implicit_cast<tb_u64>(Avail()) > len) {
+  void Append(const char *buf, unsigned long long len) {
+	if (implicit_cast<unsigned long long>(Avail()) > len) {
 	  memcpy(cur_, buf, len);
 	  cur_ += len;
 	}
   }
 
-  void Add(const tb_u64 &len) { cur_ += len; };
+  void Add(unsigned long long len) { cur_ += len; };
 
-  [[nodiscard]] const tb_s8 *Data() const { return data_; };
-  [[nodiscard]] tb_s32 Length() const { return static_cast<tb_s32>(cur_ - data_); };
+  [[nodiscard]] const char *Data() const { return data_; };
+  [[nodiscard]] int Length() const { return static_cast<int>(cur_ - data_); };
 
-  [[nodiscard]] tb_s8 *Current() const { return cur_; };
-  [[nodiscard]] tb_s32 Avail() const { return static_cast<int>(End() - cur_); };
+  [[nodiscard]] char *Current() const { return cur_; };
+  [[nodiscard]] int Avail() const { return static_cast<int>(End() - cur_); };
 
   void Reset() { cur_ = data_; };
   void BZero() { MemZero(data_, sizeof(data_)); };
@@ -40,10 +40,10 @@ class FixedBuffer final {
   [[nodiscard]] std::string ToString() const { return std::string(data_, Length()); };
 
  private:
-  [[nodiscard]] const tb_s8 *End() const { return data_ + sizeof(data_); };
+  [[nodiscard]] const char *End() const { return data_ + sizeof(data_); };
 
-  tb_s8 data_[SIZE];
-  tb_s8 *cur_ = nullptr;
+  char data_[SIZE];
+  char *cur_ = nullptr;
 
   DISALLOW_COPY_AND_ASSIGN(FixedBuffer)
 };

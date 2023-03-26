@@ -2,7 +2,7 @@
 
 namespace turbo {
 
-CountDownLatch::CountDownLatch(const tb_s32 &count) noexcept
+CountDownLatch::CountDownLatch(int count) noexcept
 	: mutex_(),
 	  cond_(mutex_),
 	  count_(count) {
@@ -22,7 +22,7 @@ void CountDownLatch::CountDown() {
 	cond_.NotifyAll();
 }
 
-tb_s32 CountDownLatch::GetCount() const {
+int CountDownLatch::GetCount() const {
   MutexLockGuard lock(mutex_);
   return count_;
 }

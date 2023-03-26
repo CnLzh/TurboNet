@@ -70,12 +70,12 @@ const std::string &Thread::Name() const {
   return name_;
 }
 
-tb_s32 Thread::NumCreated() {
+int Thread::NumCreated() {
   return num_created_;
 }
 
 void Thread::SetDefaultName() {
-  tb_s32 num = ++num_created_;
+  int num = ++num_created_;
   if (name_.empty())
 	name_ = "Thread" + std::to_string(num);
 }

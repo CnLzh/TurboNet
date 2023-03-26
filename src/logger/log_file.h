@@ -21,25 +21,25 @@ class LogFile {
   LogFile(std::string base_name,
 		  const off_t &roll_size,
 		  const bool &thread_safe = true,
-		  const tb_s32 &flush_interval = 3,
-		  const tb_s32 &check_every_n = 1024) noexcept;
+		  int flush_interval = 3,
+		  int check_every_n = 1024) noexcept;
 
   ~LogFile() = default;
 
-  void Append(const tb_s8 *data, const tb_s32 &len);
+  void Append(const char *data, int len);
   void Flush();
 
  private:
   void RollFile();
   std::string GetLogFileName(Timestamp &now_time);
-  void AppendUnLocked(const tb_s8 *data, const tb_s32 &len);
+  void AppendUnLocked(const char *data, int len);
 
   std::string base_name_;
   off_t roll_size_;
-  const tb_s32 flush_interval_;
-  const tb_s32 check_every_n_;
+  const int flush_interval_;
+  const int check_every_n_;
 
-  tb_s32 count_;
+  int count_;
 
   std::unique_ptr<FileUtil> file_;
   std::unique_ptr<MutexLock> mutex_;

@@ -11,7 +11,7 @@ static_assert(sizeof(digits) == 20, "wrong number of digits");
 const char digits_hex[] = "0123456789ABCDEF";
 static_assert(sizeof digits_hex == 17, "wrong number of digitsHex");
 
-void LogStream::Append(const tb_s8 *data, tb_u64 len) {
+void LogStream::Append(const char *data, unsigned long long len) {
   buffer_.Append(data, len);
 }
 
@@ -29,11 +29,11 @@ LogStream &LogStream::operator<<(bool v) {
 }
 
 LogStream &LogStream::operator<<(short v) {
-  return *this << static_cast<tb_s32>(v);
+  return *this << static_cast<int>(v);
 }
 
 LogStream &LogStream::operator<<(unsigned short v) {
-  return *this << static_cast<tb_u32>(v);
+  return *this << static_cast<unsigned int>(v);
 }
 
 LogStream &LogStream::operator<<(int v) {
@@ -67,7 +67,7 @@ LogStream &LogStream::operator<<(unsigned long long v) {
 }
 
 LogStream &LogStream::operator<<(float v) {
-  return *this << static_cast<tb_f64>(v);
+  return *this << static_cast<double>(v);
 }
 
 LogStream &LogStream::operator<<(double v) {
@@ -92,7 +92,7 @@ LogStream &LogStream::operator<<(const char *v) {
 }
 
 LogStream &LogStream::operator<<(const unsigned char *v) {
-  return *this << reinterpret_cast<const tb_s8 *>(v);
+  return *this << reinterpret_cast<const char *>(v);
 }
 
 LogStream &LogStream::operator<<(const void *v) {
@@ -104,17 +104,17 @@ LogStream &LogStream::operator<<(const void *v) {
   *start++ = 'x';
 
   auto cur = start;
-  auto i = reinterpret_cast<tb_u64>(v);
+  auto i = reinterpret_cast<unsigned long long>(v);
 
   do {
-	auto lsd = static_cast<tb_s32>(i % 16);
+	auto lsd = static_cast<int >(i % 16);
 	i /= 16;
 	*cur++ = digits_hex[lsd];
   } while (i != 0);
 
   *cur = '\0';
   std::reverse(start, cur);
-  buffer_.Add(static_cast<tb_s32>(cur - start + 2));
+  buffer_.Add(static_cast<int >(cur - start + 2));
 
   return *this;
 }
@@ -138,7 +138,7 @@ void LogStream::FormatInteger(T v) {
   auto i = v;
 
   do {
-	auto lsd = static_cast<tb_s32>(i % 10);
+	auto lsd = static_cast<int>(i % 10);
 	i /= 10;
 	*cur++ = zero[lsd];
   } while (i != 0);
@@ -146,7 +146,7 @@ void LogStream::FormatInteger(T v) {
   if (v < 0) *cur++ = '-';
   *cur = '\0';
   std::reverse(start, cur);
-  buffer_.Add(static_cast<tb_s32>(cur - start));
+  buffer_.Add(static_cast<int>(cur - start));
 }
 
 } // turbo

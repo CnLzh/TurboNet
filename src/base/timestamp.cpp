@@ -15,7 +15,7 @@ Timestamp turbo::Timestamp::Now() {
 }
 
 std::string Timestamp::ToString() const {
-  tb_s8 buf[32] = {0};
+  char buf[32] = {0};
   auto seconds = std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch_).count();
   auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(time_since_epoch_).count();
   snprintf(buf, sizeof(buf) - 1, "%ld.%06lld", seconds, microseconds % kMicroSecondsPerSecond);
@@ -23,7 +23,7 @@ std::string Timestamp::ToString() const {
 }
 
 std::string Timestamp::ToFormatString(bool show_microseconds) const {
-  tb_s8 buf[64] = {0};
+  char buf[64] = {0};
   auto seconds = std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch_).count();
   auto local_time = std::localtime(&seconds);
   if (show_microseconds) {

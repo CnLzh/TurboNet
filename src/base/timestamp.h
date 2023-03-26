@@ -50,8 +50,8 @@ inline bool operator==(const Timestamp &lhs, const Timestamp &rhs) {
   return lhs.TimeSinceEpoch() == rhs.TimeSinceEpoch();
 }
 
-inline Timestamp AddTime(const Timestamp &timestamp, const tb_f64 &seconds) {
-  auto delta = static_cast<tb_s64>(seconds * kMicroSecondsPerSecond);
+inline Timestamp AddTime(const Timestamp &timestamp, double seconds) {
+  auto delta = static_cast<long long>(seconds * kMicroSecondsPerSecond);
   return Timestamp(timestamp.TimeSinceEpoch() + std::chrono::microseconds(delta));
 }
 

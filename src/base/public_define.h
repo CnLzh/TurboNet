@@ -16,23 +16,6 @@
 
 namespace turbo {
 
-// Primitive data types
-using tb_s8 = char;
-using tb_u8 = unsigned char;
-
-using tb_s16 = short;
-using tb_u16 = unsigned short;
-
-using tb_s32 = int;
-using tb_u32 = unsigned int;
-
-using tb_s64_t = int64_t;
-using tb_s64 = long long;
-using tb_u64 = unsigned long long;
-
-using tb_f32 = float;
-using tb_f64 = double;
-
 // Disable Copy and Assignment Constructors
 #define DISALLOW_COPY_AND_ASSIGN(ClassName)  \
     ClassName (const ClassName&) = delete;   \
@@ -102,8 +85,8 @@ inline std::string GetPid(){
   return std::to_string(::getpid());
 }
 
-static const tb_s64 kMicroSecondsPerSecond = 1000 * 1000;
-static const tb_s64 kNanoSecondsPerSecond = 1000 * 1000 * 1000;
+static const long long kMicroSecondsPerSecond = 1000 * 1000;
+static const long long kNanoSecondsPerSecond = 1000 * 1000 * 1000;
 
 }
 #endif //TURBONET_SRC_BASE_PUBLIC_DEFINE_H_

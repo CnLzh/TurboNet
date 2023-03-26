@@ -17,16 +17,16 @@ class FileUtil {
   explicit FileUtil(const std::string &file_name) noexcept;
   ~FileUtil() noexcept;
 
-  void Append(const tb_s8 *data, const size_t &len);
+  void Append(const char *data, size_t len);
   void Flush();
   [[nodiscard]] off_t WrittenBytes() const;
 
  private:
-  size_t Write(const tb_s8 *data, const size_t &len);
+  size_t Write(const char *data, size_t len);
   FILE *fp_;
   off_t written_bytes_;
   // 64KB buffer
-  tb_s8 buffer_[64 * 1024]{};
+  char buffer_[64 * 1024]{};
   DISALLOW_COPY_AND_ASSIGN(FileUtil)
 };
 

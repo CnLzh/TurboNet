@@ -12,13 +12,13 @@ FileUtil::~FileUtil() noexcept {
   ::fclose(fp_);
 }
 
-void FileUtil::Append(const tb_s8 *data, const size_t &len) {
+void FileUtil::Append(const char *data, size_t len) {
   size_t n = Write(data, len);
   size_t remain = len - n;
   while (remain > 0) {
 	size_t x = Write(data + n, remain);
 	if (x == 0) {
-	  tb_s32 err = ferror(fp_);
+	  int err = ferror(fp_);
 	  if (err) {
 		fprintf(stderr, "AppendFile::Append() failed %s\n", StrErrorR(err));
 	  }
@@ -30,7 +30,7 @@ void FileUtil::Append(const tb_s8 *data, const size_t &len) {
   written_bytes_ += static_cast<off_t>(len);
 }
 
-size_t FileUtil::Write(const tb_s8 *data, const size_t &len) {
+size_t FileUtil::Write(const char *data, size_t len) {
   return ::fwrite_unlocked(data, 1, len, fp_);
 }
 

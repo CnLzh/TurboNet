@@ -7,8 +7,8 @@ namespace turbo {
 LogFile::LogFile(std::string base_name,
 				 const off_t &roll_size,
 				 const bool &thread_safe,
-				 const tb_s32 &flush_interval,
-				 const tb_s32 &check_every_n) noexcept
+				 int flush_interval,
+				 int check_every_n) noexcept
 	: base_name_(std::move(base_name)),
 	  roll_size_(roll_size),
 	  flush_interval_(flush_interval),
@@ -23,7 +23,7 @@ LogFile::LogFile(std::string base_name,
   RollFile();
 }
 
-void LogFile::Append(const tb_s8 *data, const tb_s32 &len) {
+void LogFile::Append(const char *data, int len) {
   if (mutex_) {
 	MutexLockGuard lock(*mutex_);
 	AppendUnLocked(data, len);
@@ -55,7 +55,7 @@ std::string LogFile::GetLogFileName(Timestamp &now_time) {
   return file_name;
 }
 
-void LogFile::AppendUnLocked(const tb_s8 *data, const tb_s32 &len) {
+void LogFile::AppendUnLocked(const char *data, int len) {
   file_->Append(data, len);
   if (file_->WrittenBytes() > roll_size_) {
 	RollFile();

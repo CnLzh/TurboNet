@@ -33,10 +33,10 @@ class ThreadPool final {
 
   std::string thread_pool_name_;
 
-  const tb_u32 kMaxPoolSize_;
-  const tb_u32 kCorePoolSize_;
-  const tb_u32 kMaxTaskSize_;
-  const tb_f64 kIdleTimeoutSeconds_;
+  const unsigned int kMaxPoolSize_;
+  const unsigned int kCorePoolSize_;
+  const unsigned int kMaxTaskSize_;
+  const double kIdleTimeoutSeconds_;
 
   std::list<std::unique_ptr<Thread>> thread_pool_;
   mutable MutexLock thread_pool_mutex_;
@@ -50,18 +50,18 @@ class ThreadPool final {
   Condition monitor_cv_;
 
   std::atomic<ThreadPoolStatus> thread_pool_status_;
-  std::atomic<tb_u32> idle_thread_num_;
-  std::atomic<tb_u32> now_thread_num_;
+  std::atomic<unsigned int> idle_thread_num_;
+  std::atomic<unsigned int> now_thread_num_;
 
   std::unique_ptr<Thread> thread_monitor_;
 
  public:
   explicit ThreadPool(
 	  std::string thread_pool_name = "ThreadPool",
-	  const tb_u32 &max_pool_size = std::thread::hardware_concurrency(),
-	  const tb_u32 &core_pool_size = std::thread::hardware_concurrency() / 2,
-	  const tb_u32 &max_task_size = 1000,
-	  const tb_f64 &idle_timeout_seconds = 120
+	  const unsigned int &max_pool_size = std::thread::hardware_concurrency(),
+	  const unsigned int &core_pool_size = std::thread::hardware_concurrency() / 2,
+	  const unsigned int &max_task_size = 1000,
+	  const double &idle_timeout_seconds = 120
   ) noexcept;
 
   ~ThreadPool() noexcept;
@@ -71,14 +71,14 @@ class ThreadPool final {
 
   std::string Name() const;
 
-  tb_u32 IdleThreadCount() const;
+  unsigned int IdleThreadCount() const;
 
   size_t ThreadCount() const;
 
   void ShutDown();
 
  private:
-  void AddThread(tb_u32 size = 1);
+  void AddThread(unsigned int size = 1);
   void InitThreadMonitor();
   DISALLOW_COPY_AND_ASSIGN(ThreadPool)
 };

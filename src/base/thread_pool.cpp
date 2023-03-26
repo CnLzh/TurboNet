@@ -5,10 +5,10 @@ namespace turbo {
 
 ThreadPool::ThreadPool(
 	std::string thread_pool_name,
-	const tb_u32 &max_pool_size,
-	const tb_u32 &core_pool_size,
-	const tb_u32 &max_task_size,
-	const tb_f64 &idle_timeout_seconds
+	const unsigned int &max_pool_size,
+	const unsigned int &core_pool_size,
+	const unsigned int &max_task_size,
+	const double &idle_timeout_seconds
 ) noexcept
 	: thread_pool_name_(std::move(thread_pool_name)),
 	  kMaxPoolSize_(max_pool_size),
@@ -34,7 +34,7 @@ ThreadPool::~ThreadPool() noexcept {
 	it->Join();
 }
 
-void ThreadPool::AddThread(tb_u32 size) {
+void ThreadPool::AddThread(unsigned int size) {
   assert(thread_pool_status_ == TPS_RUNNING);
   MutexLockGuard thread_pool_lock(thread_pool_mutex_);
   for (; now_thread_num_ < kMaxPoolSize_ && size > 0; --size) {
@@ -118,7 +118,7 @@ std::string ThreadPool::Name() const {
   return thread_pool_name_;
 }
 
-tb_u32 ThreadPool::IdleThreadCount() const {
+unsigned int ThreadPool::IdleThreadCount() const {
   return idle_thread_num_;
 }
 

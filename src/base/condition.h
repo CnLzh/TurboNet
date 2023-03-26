@@ -21,7 +21,7 @@ class Condition final {
 
   void Wait();
   // return true if timeout, false otherwise.
-  bool WaitForSeconds(const tb_f64 &seconds);
+  bool WaitForSeconds(double seconds);
 
   void Notify();
   void NotifyAll();

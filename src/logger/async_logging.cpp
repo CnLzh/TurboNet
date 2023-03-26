@@ -8,7 +8,7 @@ namespace turbo {
 
 AsyncLogging::AsyncLogging(std::string base_name,
 						   const off_t &roll_size,
-						   const int &flush_interval) noexcept
+						   int flush_interval) noexcept
 	: flush_interval_(flush_interval),
 	  running_(false),
 	  base_name_(std::move(base_name)),
@@ -41,7 +41,7 @@ void AsyncLogging::Stop() {
   thread_.Join();
 }
 
-void AsyncLogging::Append(const tb_s8 *data, const tb_s32 &len) {
+void AsyncLogging::Append(const char *data, int len) {
   MutexLockGuard lock(mutex_);
   if (current_buffer_->Avail() > len) {
 	current_buffer_->Append(data, len);
@@ -93,7 +93,7 @@ void AsyncLogging::ThreadFunc() {
 			   Timestamp::Now().ToFormatString().c_str(),
 			   buffers_to_write.size() - 2);
 	  fputs(buf, stderr);
-	  output.Append(buf, static_cast<tb_s32>(strlen(buf)));
+	  output.Append(buf, static_cast<int >(strlen(buf)));
 	  buffers_to_write.erase(buffers_to_write.begin() + 2, buffers_to_write.end());
 	}
 

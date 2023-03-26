@@ -11,11 +11,11 @@ namespace turbo {
 class T {
  public:
   template<size_t N>
-  constexpr explicit T(const tb_s8(&str)[N]) noexcept
+  constexpr explicit T(const char(&str)[N]) noexcept
 	  : str_(str),
 		len_(N - 1) {}
 
-  constexpr explicit T(const tb_s8 *str, const size_t &len) noexcept
+  constexpr explicit T(const char *str, const size_t &len) noexcept
 	  : str_(str),
 		len_(len) {}
 
@@ -28,9 +28,9 @@ inline LogStream &operator<<(LogStream &s, T v) {
   return s;
 }
 
-thread_local tb_s64 t_last_seconds = 0;
+thread_local long long t_last_seconds = 0;
 thread_local std::string t_time_str;
-thread_local tb_s8 t_erno_buf[512];
+thread_local char t_erno_buf[512];
 
 static AsyncLogging *g_async_logging = nullptr;
 static std::atomic<bool> g_is_default_async_started = false;
@@ -40,7 +40,7 @@ inline LogStream &operator<<(LogStream &s, const Logger::SourceFile &v) {
   return s;
 }
 
-void DefaultOutput(const tb_s8 *msg, tb_s32 len) {
+void DefaultOutput(const char *msg, int len) {
   ::fwrite(msg, 1, len, stdout);
 }
 
@@ -48,11 +48,11 @@ void DefaultFlush() {
   ::fflush(stdout);
 }
 
-void DefaultAsyncLoggingOutput(const tb_s8 *msg, tb_s32 len) {
+void DefaultAsyncLoggingOutput(const char *msg, int len) {
   g_async_logging->Append(msg, len);
 }
 
-const tb_s8 *StrErrorR(tb_s32 errno_info) {
+const char *StrErrorR(int errno_info) {
   strerror_r(errno_info, t_erno_buf, sizeof(t_erno_buf));
   return t_erno_buf;
 }
@@ -61,7 +61,7 @@ Logger::LogLevel Logger::s_log_level_ = Logger::LogLevel::INFO;
 Logger::OutputFunc Logger::s_output_ = DefaultOutput;
 Logger::FlushFunc Logger::s_flush_ = DefaultFlush;
 
-const tb_s8 *kLogLevelName[Logger::LogLevel::NUM_LOG_LEVELS] = {
+const char *kLogLevelName[Logger::LogLevel::NUM_LOG_LEVELS] = {
 	"DEBUG ",
 	"INFO  ",
 	"WARN  ",
@@ -69,20 +69,20 @@ const tb_s8 *kLogLevelName[Logger::LogLevel::NUM_LOG_LEVELS] = {
 	"FATAL ",
 };
 
-Logger::Logger(const tb_s8 *file, tb_s32 line, const tb_s8 *func) noexcept
+Logger::Logger(const char *file, int line, const char *func) noexcept
 	: impl_(DEBUG, 0, file, line) {
   impl_.log_stream_ << "(" << func << "): ";
 }
 
-Logger::Logger(const tb_s8 *file, tb_s32 line) noexcept
+Logger::Logger(const char *file, int line) noexcept
 	: impl_(INFO, 0, file, line) {
 }
 
-Logger::Logger(const tb_s8 *file, tb_s32 line, LogLevel level) noexcept
+Logger::Logger(const char *file, int line, LogLevel level) noexcept
 	: impl_(level, 0, file, line) {
 }
 
-Logger::Logger(const tb_s8 *file, tb_s32 line, bool is_abort) noexcept
+Logger::Logger(const char *file, int line, bool is_abort) noexcept
 	: impl_(is_abort ? ERROR : FATAL, errno, file, line) {
 }
 
@@ -116,7 +116,7 @@ void Logger::SetFlush(Logger::FlushFunc func) {
   s_flush_ = func;
 }
 
-void Logger::SetDefaultSingletonAsyncLogging(const tb_s8 *base_name, const off_t &roll_size) {
+void Logger::SetDefaultSingletonAsyncLogging(const char *base_name, const off_t &roll_size) {
   g_async_logging = &Singleton<AsyncLogging>::Instance(base_name, roll_size);
   SetOutput(DefaultAsyncLoggingOutput);
 }
@@ -138,9 +138,9 @@ void Logger::StopDefaultSingletonAsyncLogging() {
 }
 
 Logger::Impl::Impl(LogLevel log_level,
-				   tb_s32 errno_info,
-				   const tb_s8 *file,
-				   tb_s32 line) noexcept
+				   int errno_info,
+				   const char *file,
+				   int line) noexcept
 	: timestamp_(Timestamp::Now()),
 	  log_level_(log_level),
 	  log_stream_(),
@@ -166,7 +166,7 @@ void Logger::Impl::FormatTime() {
   }
 
   auto microseconds = timestamp_.TimeSinceEpochMicroSeconds().count();
-  tb_s8 buf[8];
+  char buf[8];
   snprintf(buf, sizeof(buf), ".%06lld", microseconds % kMicroSecondsPerSecond);
 
   log_stream_ << T(t_time_str.c_str(), 19) << T(buf);

@@ -26,9 +26,9 @@ void Condition::NotifyAll() {
   cond_.notify_all();
 }
 
-bool Condition::WaitForSeconds(const tb_f64 &seconds) {
+bool Condition::WaitForSeconds(double seconds) {
   mutex_.AssertLocked();
-  auto nano_seconds = static_cast<tb_s64>(seconds * kNanoSecondsPerSecond);
+  auto nano_seconds = static_cast<long long>(seconds * kNanoSecondsPerSecond);
   MutexLock::UnAssignGuard ug(mutex_);
   return cond_.wait_for(lock_, std::chrono::nanoseconds(nano_seconds)) == std::cv_status::timeout;
 }

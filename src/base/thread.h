@@ -29,7 +29,7 @@ class Thread final {
   pid_t Tid() const;
   const std::string &Name() const;
 
-  static tb_s32 NumCreated();
+  static int NumCreated();
 
  private:
   void SetDefaultName();

@@ -37,32 +37,32 @@ class Logger final {
 
   class SourceFile final {
    public:
-	template<tb_s32 N>
-	explicit SourceFile(const tb_s8 (&arr)[N]) noexcept
+	template<int N>
+	explicit SourceFile(const char (&arr)[N]) noexcept
 		: data_(arr),
 		  size_(N - 1) {
-	  const tb_s8 *slash = strrchr(data_, '/');
+	  const char *slash = strrchr(data_, '/');
 	  if (slash) {
 		data_ = slash + 1;
-		size_ -= static_cast<tb_s32>(data_ - arr);
+		size_ -= static_cast<int>(data_ - arr);
 	  }
 	}
 
-	explicit SourceFile(const tb_s8 *file_name) noexcept
+	explicit SourceFile(const char *file_name) noexcept
 		: data_(file_name) {
-	  const tb_s8 *slash = strrchr(data_, '/');
+	  const char *slash = strrchr(data_, '/');
 	  if (slash) data_ = slash + 1;
-	  size_ = static_cast<tb_s32>(strlen(data_));
+	  size_ = static_cast<int>(strlen(data_));
 	}
 
 	const char *data_;
-	tb_s32 size_;
+	int size_;
   };
 
-  Logger(const tb_s8 *file, tb_s32 line) noexcept;
-  Logger(const tb_s8 *file, tb_s32 line, const tb_s8 *func) noexcept;
-  Logger(const tb_s8 *file, tb_s32 line, LogLevel level) noexcept;
-  Logger(const tb_s8 *file, tb_s32 line, bool is_abort) noexcept;
+  Logger(const char *file, int line) noexcept;
+  Logger(const char *file, int line, const char *func) noexcept;
+  Logger(const char *file, int line, LogLevel level) noexcept;
+  Logger(const char *file, int line, bool is_abort) noexcept;
 
   ~Logger();
 
@@ -71,13 +71,13 @@ class Logger final {
   static LogLevel GetLogLevel();
   static void SetLogLevel(const LogLevel &level);
 
-  using OutputFunc = void (*)(const tb_s8 *msg, tb_s32 len);
+  using OutputFunc = void (*)(const char *msg, int len);
   using FlushFunc = void (*)();
 
   static void SetOutput(OutputFunc);
   static void SetFlush(FlushFunc);
 
-  static void SetDefaultSingletonAsyncLogging(const tb_s8 *base_name = "TurboNet",
+  static void SetDefaultSingletonAsyncLogging(const char *base_name = "TurboNet",
 											  const off_t &roll_size = 512 * 1024 * 1024);
   static void StartDefaultSingletonAsyncLogging();
   static void StopDefaultSingletonAsyncLogging();
@@ -88,14 +88,14 @@ class Logger final {
    public:
 	using LogLevel = Logger::LogLevel;
 
-	Impl(LogLevel log_level, tb_s32 errno_info, const tb_s8 *file, tb_s32 line) noexcept;
+	Impl(LogLevel log_level, int errno_info, const char *file, int line) noexcept;
 	void FormatTime();
 	void Finish();
 
 	Timestamp timestamp_;
 	LogLevel log_level_;
 	LogStream log_stream_;
-	tb_s32 line_;
+	int line_;
 	SourceFile source_file_;
   };
 
@@ -107,7 +107,7 @@ class Logger final {
   DISALLOW_COPY_AND_ASSIGN(Logger)
 };
 
-const tb_s8 *StrErrorR(tb_s32 errno_info);
+const char *StrErrorR(int errno_info);
 
 } // turbo
 

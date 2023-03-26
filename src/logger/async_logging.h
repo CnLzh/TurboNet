@@ -21,12 +21,12 @@ class AsyncLogging {
  public:
   AsyncLogging(std::string base_name,
 			   const off_t &roll_size,
-			   const int &flush_interval = 3) noexcept;
+			   int flush_interval = 3) noexcept;
   ~AsyncLogging();
 
   void Start();
   void Stop();
-  void Append(const tb_s8 *data, const tb_s32 &len);
+  void Append(const char *data, int len);
 
  private:
 
@@ -36,7 +36,7 @@ class AsyncLogging {
   using BufferVector = std::vector<std::unique_ptr<Buffer>>;
   using BufferPtr = BufferVector::value_type;
 
-  const tb_s32 flush_interval_;
+  const int flush_interval_;
   std::atomic<bool> running_;
   const std::string base_name_;
   const off_t roll_size_;
