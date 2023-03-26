@@ -19,20 +19,20 @@ namespace turbo {
 class LogFile {
  public:
   LogFile(std::string base_name,
-		  const off_t &roll_size,
-		  const bool &thread_safe = true,
+		  off_t roll_size,
+		  bool thread_safe = true,
 		  int flush_interval = 3,
 		  int check_every_n = 1024) noexcept;
 
   ~LogFile() = default;
 
-  void Append(const char *data, int len);
+  void Append(const char *data, size_t len);
   void Flush();
 
  private:
   void RollFile();
   std::string GetLogFileName(Timestamp &now_time);
-  void AppendUnLocked(const char *data, int len);
+  void AppendUnLocked(const char *data, size_t len);
 
   std::string base_name_;
   off_t roll_size_;

@@ -71,14 +71,14 @@ class Logger final {
   static LogLevel GetLogLevel();
   static void SetLogLevel(const LogLevel &level);
 
-  using OutputFunc = void (*)(const char *msg, int len);
+  using OutputFunc = void (*)(const char *msg, size_t len);
   using FlushFunc = void (*)();
 
   static void SetOutput(OutputFunc);
   static void SetFlush(FlushFunc);
 
   static void SetDefaultSingletonAsyncLogging(const char *base_name = "TurboNet",
-											  const off_t &roll_size = 512 * 1024 * 1024);
+											  off_t roll_size = 512 * 1024 * 1024);
   static void StartDefaultSingletonAsyncLogging();
   static void StopDefaultSingletonAsyncLogging();
 

@@ -19,7 +19,7 @@ class LogStream final {
   using Buffer = FixedBuffer<kSmallBuffer>;
 
   LogStream() = default;
-  void Append(const char *data, unsigned long long len);
+  void Append(const char *data, size_t len);
   void ResetBuffer();
   [[nodiscard]] const Buffer &GetBuffer() const;
 

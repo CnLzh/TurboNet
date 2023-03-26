@@ -20,13 +20,13 @@ namespace turbo {
 class AsyncLogging {
  public:
   AsyncLogging(std::string base_name,
-			   const off_t &roll_size,
+			   off_t roll_size,
 			   int flush_interval = 3) noexcept;
   ~AsyncLogging();
 
   void Start();
   void Stop();
-  void Append(const char *data, int len);
+  void Append(const char *data, size_t len);
 
  private:
 

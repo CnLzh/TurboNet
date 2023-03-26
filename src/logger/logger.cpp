@@ -40,7 +40,7 @@ inline LogStream &operator<<(LogStream &s, const Logger::SourceFile &v) {
   return s;
 }
 
-void DefaultOutput(const char *msg, int len) {
+void DefaultOutput(const char *msg, size_t len) {
   ::fwrite(msg, 1, len, stdout);
 }
 
@@ -48,7 +48,7 @@ void DefaultFlush() {
   ::fflush(stdout);
 }
 
-void DefaultAsyncLoggingOutput(const char *msg, int len) {
+void DefaultAsyncLoggingOutput(const char *msg, size_t len) {
   g_async_logging->Append(msg, len);
 }
 
@@ -116,7 +116,7 @@ void Logger::SetFlush(Logger::FlushFunc func) {
   s_flush_ = func;
 }
 
-void Logger::SetDefaultSingletonAsyncLogging(const char *base_name, const off_t &roll_size) {
+void Logger::SetDefaultSingletonAsyncLogging(const char *base_name, off_t roll_size) {
   g_async_logging = &Singleton<AsyncLogging>::Instance(base_name, roll_size);
   SetOutput(DefaultAsyncLoggingOutput);
 }

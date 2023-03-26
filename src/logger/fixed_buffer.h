@@ -19,8 +19,8 @@ class FixedBuffer final {
  public:
   FixedBuffer() noexcept: data_(), cur_(data_) {};
 
-  void Append(const char *buf, unsigned long long len) {
-	if (implicit_cast<unsigned long long>(Avail()) > len) {
+  void Append(const char *buf, size_t len) {
+	if (implicit_cast<size_t>(Avail()) > len) {
 	  memcpy(cur_, buf, len);
 	  cur_ += len;
 	}
