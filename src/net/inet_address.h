@@ -29,14 +29,14 @@ class InetAddress {
   [[nodiscard]] uint16_t PortNet() const;
   [[nodiscard]] uint16_t PortHost() const;
 
-  [[nodiscard]] uint32_t Ip4Net() const;
-  [[nodiscard]] uint32_t Ip4Host() const;
-  [[nodiscard]] const uint8_t *Ip6() const;
+  [[nodiscard]] uint32_t Ipv4Net() const;
+  [[nodiscard]] uint32_t Ipv4Host() const;
+  [[nodiscard]] const uint8_t *Ipv6() const;
 
   [[nodiscard]] std::string IpToString() const;
   [[nodiscard]] std::string IpPortToString() const;
 
-  static bool Resolve(const std::string &host_bane, InetAddress *result);
+  static bool Resolve(const std::string &host_name, std::string &ip);
 
  private:
   enum AddressType {

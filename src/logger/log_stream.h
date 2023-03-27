@@ -45,7 +45,7 @@ class LogStream final {
   template<typename T>
   void FormatInteger(T);
 
-  static const unsigned int kMaxNumericSize = 48;
+  static const int kMaxNumericSize = 48;
 
   Buffer buffer_;
 

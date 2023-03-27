@@ -1,6 +1,6 @@
 #include "socket_ops.h"
 #include "logger.h"
-#include "endian.h"
+#include "inet_endian.h"
 
 #include <cassert>
 #include <sys/uio.h>
@@ -118,6 +118,19 @@ void PortFromString(uint16_t port, struct sockaddr_in6 *addr, bool loop_back_onl
   addr->sin6_port = HostToNetwork16(port);
 }
 
+void IpFromString(const char *ip, struct sockaddr_in *addr) {
+  addr->sin_family = AF_INET;
+  int ret = ::inet_pton(AF_INET, ip, &addr->sin_addr);
+  if (ret <= 0)
+	LOG_SYS_ERROR << "IpFromString, error = " << ret;
+}
+
+void IpFromString(const char *ip, struct sockaddr_in6 *addr) {
+  addr->sin6_family = AF_INET6;
+  int ret = inet_pton(AF_INET6, ip, &addr->sin6_addr);
+  if (ret <= 0)
+	LOG_SYS_ERROR << "IpFromString, error = " << ret;
+}
 void IpPortFromString(const char *ip, uint16_t port, struct sockaddr_in *addr) {
   addr->sin_family = AF_INET;
   addr->sin_port = HostToNetwork16(port);

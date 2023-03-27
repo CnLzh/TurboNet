@@ -4,11 +4,11 @@
 // brief:    Conversion between byte orders.
 // author:   CnLzh
 
-#ifndef TURBONET_SRC_NET_ENDIAN_H_
-#define TURBONET_SRC_NET_ENDIAN_H_
+#ifndef TURBONET_SRC_NET_INET_ENDIAN_H_
+#define TURBONET_SRC_NET_INET_ENDIAN_H_
 
-#include <endian.h>
 #include <cstdint>
+#include <endian.h>
 
 namespace turbo::sockets {
 
@@ -37,4 +37,4 @@ inline uint16_t NetworkToHost16(uint16_t net16) {
 }
 
 } // turbo::sockets
-#endif //TURBONET_SRC_NET_ENDIAN_H_
+#endif //TURBONET_SRC_NET_INET_ENDIAN_H_

@@ -13,6 +13,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 include_directories(
         ${PROJECT_SOURCE_DIR}/src/base
         ${PROJECT_SOURCE_DIR}/src/logger
+        ${PROJECT_SOURCE_DIR}/src/net
 )
 
 # 指定目录下的源文件
@@ -50,4 +51,6 @@ endif ()
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     enable_testing()
     add_subdirectory(${PROJECT_SOURCE_DIR}/src/base/test)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/src/logger/test)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/src/net/test)
 endif ()

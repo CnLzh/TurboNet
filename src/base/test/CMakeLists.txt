@@ -34,13 +34,3 @@ add_test(NAME ThreadTest COMMAND ThreadTest)
 add_executable(ThreadPoolTest thread_pool_test.cpp)
 target_link_libraries(ThreadPoolTest TurboNet)
 add_test(NAME ThreadPoolTest COMMAND ThreadPoolTest)
-
-# logger test
-add_executable(LoggerTest logger_test.cpp)
-target_link_libraries(LoggerTest TurboNet)
-add_test(NAME LoggerTest COMMAND LoggerTest)
-
-# async_logging test
-add_executable(AsyncLoggingTest async_logging_test.cpp)
-target_link_libraries(AsyncLoggingTest TurboNet)
-add_test(NAME AsyncLoggingTest COMMAND AsyncLoggingTest)

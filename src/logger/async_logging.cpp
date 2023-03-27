@@ -43,7 +43,7 @@ void AsyncLogging::Stop() {
 
 void AsyncLogging::Append(const char *data, size_t len) {
   MutexLockGuard lock(mutex_);
-  if (current_buffer_->Avail() > len) {
+  if (current_buffer_->Avail() > static_cast<int>(len)) {
 	current_buffer_->Append(data, len);
   } else {
 	buffers_.push_back(std::move(current_buffer_));
