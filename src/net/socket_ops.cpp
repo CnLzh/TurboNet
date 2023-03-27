@@ -4,7 +4,7 @@
 
 #include <cassert>
 #include <sys/uio.h>
-namespace turbo {
+namespace turbo::sockets {
 
 const struct sockaddr *SockaddrCast(const struct sockaddr_in *addr) {
   return static_cast<const struct sockaddr *>(implicit_cast<const void *>(addr));
@@ -106,6 +106,18 @@ void IpPortToString(char *buf, size_t size, const struct sockaddr *addr) {
   snprintf(buf + end, size - end, "%u", port);
 }
 
+void PortFromString(uint16_t port, struct sockaddr_in *addr, bool loop_back_only) {
+  addr->sin_family = AF_INET;
+  addr->sin_addr.s_addr = HostToNetwork32(loop_back_only ? INADDR_LOOPBACK : INADDR_ANY);
+  addr->sin_port = HostToNetwork16(port);
+}
+
+void PortFromString(uint16_t port, struct sockaddr_in6 *addr, bool loop_back_only) {
+  addr->sin6_family = AF_INET6;
+  addr->sin6_addr = loop_back_only ? in6addr_loopback : in6addr_any;
+  addr->sin6_port = HostToNetwork16(port);
+}
+
 void IpPortFromString(const char *ip, uint16_t port, struct sockaddr_in *addr) {
   addr->sin_family = AF_INET;
   addr->sin_port = HostToNetwork16(port);
@@ -167,4 +179,4 @@ bool IsSelfConnect(int sockfd) {
   }
 }
 
-} // turbo
+} // turbo::sockets

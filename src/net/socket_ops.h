@@ -9,7 +9,7 @@
 
 #include <arpa/inet.h>
 
-namespace turbo {
+namespace turbo::sockets {
 
 const struct sockaddr *SockaddrCast(const struct sockaddr_in *addr);
 struct sockaddr *SockaddrCast(struct sockaddr_in *addr);
@@ -32,6 +32,8 @@ void ShutdownWriteOrDie(int sockfd);
 
 void IpToString(char *buf, size_t size, const struct sockaddr *addr);
 void IpPortToString(char *buf, size_t size, const struct sockaddr *addr);
+void PortFromString(uint16_t port, struct sockaddr_in *addr, bool loop_back_only);
+void PortFromString(uint16_t port, struct sockaddr_in6 *addr, bool loop_back_only);
 void IpPortFromString(const char *ip, uint16_t port, struct sockaddr_in *addr);
 void IpPortFromString(const char *ip, uint16_t port, struct sockaddr_in6 *addr);
 
@@ -41,6 +43,6 @@ struct sockaddr_in6 GetLocalAddr(int sockfd);
 struct sockaddr_in6 GetPeerAddr(int sockfd);
 bool IsSelfConnect(int sockfd);
 
-}
+} // turbo::sockets
 
 #endif //TURBONET_SRC_NET_SOCKET_OPS_H_

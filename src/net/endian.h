@@ -10,7 +10,7 @@
 #include <endian.h>
 #include <cstdint>
 
-namespace turbo {
+namespace turbo::sockets {
 
 inline uint64_t HostToNetwork64(uint64_t host64) {
   return htobe64(host64);
@@ -36,5 +36,5 @@ inline uint16_t NetworkToHost16(uint16_t net16) {
   return be16toh(net16);
 }
 
-}
+} // turbo::sockets
 #endif //TURBONET_SRC_NET_ENDIAN_H_
