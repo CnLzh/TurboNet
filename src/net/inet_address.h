@@ -39,6 +39,7 @@ class InetAddress {
   static bool Resolve(const std::string &host_name, std::string &ip);
 
  private:
+  // TODO: delete AddressType
   enum AddressType {
 	ADDRESS_TYPE_IPV4,
 	ADDRESS_TYPE_IPV6,
