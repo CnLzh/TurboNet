@@ -69,7 +69,7 @@ ssize_t ReadV(int sockfd, const struct iovec *iov, int iovcnt) {
   return ::readv(sockfd, iov, iovcnt);
 }
 
-size_t Write(int sockfd, const void *buf, size_t cnt) {
+ssize_t Write(int sockfd, const void *buf, size_t cnt) {
   return ::write(sockfd, buf, cnt);
 }
 

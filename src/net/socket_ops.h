@@ -26,7 +26,7 @@ void ListenOrDie(int sockfd);
 int AcceptOrDie(int sockfd, struct sockaddr_in6 *addr);
 ssize_t Read(int sockfd, void *buf, size_t cnt);
 ssize_t ReadV(int sockfd, const struct iovec *iov, int iovcnt);
-size_t Write(int sockfd, const void *buf, size_t cnt);
+ssize_t Write(int sockfd, const void *buf, size_t cnt);
 void CloseOrDie(int sockfd);
 void ShutdownWriteOrDie(int sockfd);
 
