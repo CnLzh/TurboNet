@@ -103,19 +103,7 @@ void IpPortToString(char *buf, size_t size, const struct sockaddr *addr) {
   const struct sockaddr_in *addr4 = SockaddrInCast(addr);
   uint16_t port = NetworkToHost16(addr4->sin_port);
   assert(size > end);
-  snprintf(buf + end, size - end, "%u", port);
-}
-
-void PortFromString(uint16_t port, struct sockaddr_in *addr, bool loop_back_only) {
-  addr->sin_family = AF_INET;
-  addr->sin_addr.s_addr = HostToNetwork32(loop_back_only ? INADDR_LOOPBACK : INADDR_ANY);
-  addr->sin_port = HostToNetwork16(port);
-}
-
-void PortFromString(uint16_t port, struct sockaddr_in6 *addr, bool loop_back_only) {
-  addr->sin6_family = AF_INET6;
-  addr->sin6_addr = loop_back_only ? in6addr_loopback : in6addr_any;
-  addr->sin6_port = HostToNetwork16(port);
+  snprintf(buf + end, size - end, ":%u", port);
 }
 
 void IpFromString(const char *ip, struct sockaddr_in *addr) {
@@ -132,19 +120,13 @@ void IpFromString(const char *ip, struct sockaddr_in6 *addr) {
 	LOG_SYS_ERROR << "IpFromString, error = " << ret;
 }
 void IpPortFromString(const char *ip, uint16_t port, struct sockaddr_in *addr) {
-  addr->sin_family = AF_INET;
+  IpFromString(ip, addr);
   addr->sin_port = HostToNetwork16(port);
-  int ret = ::inet_pton(AF_INET, ip, &addr->sin_addr);
-  if (ret <= 0)
-	LOG_SYS_ERROR << "IpPortFromString, error = " << ret;
 }
 
 void IpPortFromString(const char *ip, uint16_t port, struct sockaddr_in6 *addr) {
-  addr->sin6_family = AF_INET6;
+  IpFromString(ip, addr);
   addr->sin6_port = HostToNetwork16(port);
-  int ret = inet_pton(AF_INET6, ip, &addr->sin6_addr);
-  if (ret <= 0)
-	LOG_SYS_ERROR << "IpPortFromString, error = " << ret;
 }
 
 int GetSocketError(int sockfd) {

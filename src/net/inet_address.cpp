@@ -14,12 +14,14 @@ namespace turbo {
 InetAddress::InetAddress(uint16_t port, bool loop_back_only, bool ipv6) {
   if (ipv6) {
 	MemZero(&addr6_, sizeof(addr6_));
-	sockets::PortFromString(port, &addr6_, loop_back_only);
-	using_type_ = ADDRESS_TYPE_IPV6;
+	addr6_.sin6_family = AF_INET6;
+	addr6_.sin6_port = sockets::HostToNetwork16(port);
+	addr6_.sin6_addr = loop_back_only ? in6addr_loopback : in6addr_any;
   } else {
 	MemZero(&addr_, sizeof(addr_));
-	sockets::PortFromString(port, &addr_, loop_back_only);
-	using_type_ = ADDRESS_TYPE_IPV4;
+	addr_.sin_family = AF_INET;
+	addr_.sin_port = sockets::HostToNetwork16(port);
+	addr_.sin_addr.s_addr = sockets::HostToNetwork32(loop_back_only ? INADDR_LOOPBACK : INADDR_ANY);
   }
 }
 
@@ -27,34 +29,26 @@ InetAddress::InetAddress(const std::string &ip, uint16_t port, bool ipv6) {
   if (ipv6 || ip.find_first_of(':') != std::string::npos) {
 	MemZero(&addr6_, sizeof(addr6_));
 	sockets::IpPortFromString(ip.c_str(), port, &addr6_);
-	using_type_ = ADDRESS_TYPE_IPV6;
   } else {
 	MemZero(&addr_, sizeof(addr_));
 	sockets::IpPortFromString(ip.c_str(), port, &addr_);
-	using_type_ = ADDRESS_TYPE_IPV4;
   }
 }
 InetAddress::InetAddress(const sockaddr_in &addr)
-	: addr_(addr),
-	  using_type_(ADDRESS_TYPE_IPV4) {
+	: addr_(addr) {
 
 }
 
 InetAddress::InetAddress(const sockaddr_in6 &addr6)
-	: addr6_(addr6),
-	  using_type_(ADDRESS_TYPE_IPV6) {
+	: addr6_(addr6) {
 
 }
 
 sa_family_t InetAddress::Family() const {
-  if (CHECK_IPV4(using_type_))
-	return addr_.sin_family;
-  return addr6_.sin6_family;
+  return addr_.sin_family;
 }
 
 const struct sockaddr *InetAddress::GetSockAddr() const {
-  if (CHECK_IPV4(using_type_))
-	return sockets::SockaddrCast(&addr_);
   return sockets::SockaddrCast(&addr6_);
 }
 
@@ -79,9 +73,7 @@ std::string InetAddress::IpPortToString() const {
 }
 
 uint16_t InetAddress::PortNet() const {
-  if (CHECK_IPV4(using_type_))
-	return addr_.sin_port;
-  return addr6_.sin6_port;
+  return addr_.sin_port;
 }
 
 uint16_t InetAddress::PortHost() const {
@@ -89,15 +81,16 @@ uint16_t InetAddress::PortHost() const {
 }
 
 uint32_t InetAddress::Ipv4Net() const {
-  assert(CHECK_IPV4(using_type_));
+  assert(addr_.sin_family == AF_INET);
   return addr_.sin_addr.s_addr;
 }
 uint32_t InetAddress::Ipv4Host() const {
-  assert(CHECK_IPV4(using_type_));
+  assert(addr_.sin_family == AF_INET);
   return sockets::NetworkToHost32(addr_.sin_addr.s_addr);
 }
 
 const uint8_t *InetAddress::Ipv6() const {
+  assert(addr6_.sin6_family == AF_INET6);
   return addr6_.sin6_addr.__in6_u.__u6_addr8;
 }
 

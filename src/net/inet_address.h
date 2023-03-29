@@ -15,7 +15,7 @@ namespace turbo {
 
 class InetAddress {
  public:
-  explicit InetAddress(uint16_t port, bool loop_back_only = false, bool ipv6 = false);
+  explicit InetAddress(uint16_t port = 0, bool loop_back_only = false, bool ipv6 = false);
   InetAddress(const std::string &ip, uint16_t port, bool ipv6 = false);
   explicit InetAddress(const struct sockaddr_in &addr);
   explicit InetAddress(const struct sockaddr_in6 &addr6);
@@ -39,18 +39,11 @@ class InetAddress {
   static bool Resolve(const std::string &host_name, std::string &ip);
 
  private:
-  // TODO: delete AddressType
-  enum AddressType {
-	ADDRESS_TYPE_IPV4,
-	ADDRESS_TYPE_IPV6,
-  };
-
   union {
 	struct sockaddr_in addr_{};
 	struct sockaddr_in6 addr6_;
   };
 
-  AddressType using_type_;
 };
 
 } // turbo

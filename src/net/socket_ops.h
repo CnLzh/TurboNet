@@ -32,8 +32,6 @@ void ShutdownWriteOrDie(int sockfd);
 
 void IpToString(char *buf, size_t size, const struct sockaddr *addr);
 void IpPortToString(char *buf, size_t size, const struct sockaddr *addr);
-void PortFromString(uint16_t port, struct sockaddr_in *addr, bool loop_back_only);
-void PortFromString(uint16_t port, struct sockaddr_in6 *addr, bool loop_back_only);
 void IpFromString(const char *ip, struct sockaddr_in *addr);
 void IpFromString(const char *ip, struct sockaddr_in6 *addr);
 void IpPortFromString(const char *ip, uint16_t port, struct sockaddr_in *addr);
