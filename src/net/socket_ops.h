@@ -19,7 +19,7 @@ struct sockaddr *SockaddrCast(struct sockaddr_in6 *addr);
 const struct sockaddr_in *SockaddrInCast(const struct sockaddr *addr);
 const struct sockaddr_in6 *SockaddrIn6Cast(const struct sockaddr *addr);
 
-int CreateNoBlockingOrDie(sa_family_t family);
+int CreateNoBlockingSocketOrDie(sa_family_t family);
 int Connect(int sockfd, const struct sockaddr *addr);
 void BindOrDie(int sockfd, const struct sockaddr *addr);
 void ListenOrDie(int sockfd);

@@ -30,7 +30,7 @@ const struct sockaddr_in6 *SockaddrIn6Cast(const struct sockaddr *addr) {
   return static_cast<const struct sockaddr_in6 *>(implicit_cast<const void *>(addr));
 }
 
-int CreateNoBlockingOrDie(sa_family_t family) {
+int CreateNoBlockingSocketOrDie(sa_family_t family) {
   int sockfd = ::socket(family, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
   if (sockfd < 0)
 	LOG_SYS_FATAL << "CreateNoBlockOrDie, error = " << sockfd;
