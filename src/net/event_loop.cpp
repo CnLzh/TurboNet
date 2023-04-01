@@ -3,6 +3,8 @@
 #include "current_thread.h"
 
 #include <cassert>
+
+#include <sys/poll.h>
 namespace turbo {
 
 thread_local EventLoop *t_loop_in_this_thread = nullptr;
@@ -38,6 +40,9 @@ void EventLoop::Loop() {
   AssertInLoopThread();
   looping_ = true;
   // TODO: do something
+  ::poll(nullptr, 0, 5 * 1000);
+  LOG_DEBUG << "EventLoop " << this << " stop looping";
+  looping_ = false;
 }
 
 // private
