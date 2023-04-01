@@ -51,6 +51,19 @@ void EventLoop::AbortNotInLoopThread() const {
 			<< thread_id_ << ", current thread id = " << CurrentThread::CachedTid();
 }
 
+void EventLoop::UpdateChannel(Channel *channel) {
+  //TODO:
+}
+
+void EventLoop::RemoveChannel(Channel *channel) {
+  //TODO:
+}
+
+bool EventLoop::HaveChannel(Channel *channel) {
+  //TODO:
+  return false;
+}
+
 // static
 EventLoop *EventLoop::GetEventLoopCurrentThread() {
   return t_loop_in_this_thread;

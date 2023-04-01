@@ -11,6 +11,8 @@
 
 namespace turbo {
 
+class Channel;
+
 class EventLoop {
  public:
   EventLoop();
@@ -21,7 +23,11 @@ class EventLoop {
 
   void Loop();
 
-  static EventLoop* GetEventLoopCurrentThread();
+  void UpdateChannel(Channel *channel);
+  void RemoveChannel(Channel *channel);
+  bool HaveChannel(Channel *channel);
+
+  static EventLoop *GetEventLoopCurrentThread();
 
  private:
   void AbortNotInLoopThread() const;
