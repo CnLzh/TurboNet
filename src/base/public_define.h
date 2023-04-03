@@ -19,7 +19,7 @@ namespace turbo {
 // Disable Copy and Assignment Constructors
 #define DISALLOW_COPY_AND_ASSIGN(ClassName)  \
     ClassName (const ClassName&) = delete;   \
-    ClassName operator=(const ClassName&) = delete;
+    void operator=(const ClassName&) = delete;
 
 // auto generated operator "!="
 // derived must implement operator "="

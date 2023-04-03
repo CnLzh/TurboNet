@@ -8,6 +8,7 @@
 #define TURBONET_SRC_NET_POLLER_H_
 
 #include "public_define.h"
+#include "timestamp.h"
 
 #include <vector>
 #include <map>
@@ -21,7 +22,16 @@ class Poller {
   using ChannelList = std::vector<Channel *>;
 
   explicit Poller(EventLoop *loop);
-  ~Poller() = default;
+  virtual ~Poller() = default;
+
+  virtual Timestamp Poll(int timeout, ChannelList *active_channels) = 0;
+
+  virtual void UpdateChannel(Channel *channel) = 0;
+  virtual void RemoveChannel(Channel *channel) = 0;
+
+  void AssertInLoopThread() const;
+
+  virtual bool HaveChannel(Channel *channel) const;
 
  protected:
   using ChannelMap = std::map<int, Channel *>;
