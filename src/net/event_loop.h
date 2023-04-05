@@ -9,9 +9,13 @@
 
 #include "public_define.h"
 
+#include <atomic>
+#include <memory>
+
 namespace turbo {
 
 class Channel;
+class Poller;
 
 class EventLoop {
  public:
@@ -33,7 +37,10 @@ class EventLoop {
   void AbortNotInLoopThread() const;
 
   bool looping_;
+  std::atomic<bool> quit_;
   const pid_t thread_id_;
+  std::unique_ptr<Poller> poller_;
+  std::unique_ptr<Channel> channel_;
   DISALLOW_COPY_AND_ASSIGN(EventLoop)
 };
 
