@@ -139,7 +139,7 @@ ssize_t Buffer::ReadFd(int fd, int *errno_info) {
   const ssize_t n = sockets::ReadV(fd, vec, iovcnt);
   if (n < 0) {
 	*errno_info = errno;
-  } else if (n < write_able) {
+  } else if (n < static_cast<ssize_t>(write_able)) {
 	MoveWriteBackward(n);
   } else {
 	write_index = buffer_.size();

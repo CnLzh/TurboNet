@@ -8,6 +8,7 @@
 #define TURBONET_SRC_NET_CHANNEL_H_
 
 #include "public_define.h"
+#include "timestamp.h"
 
 #include <functional>
 namespace turbo {
@@ -17,11 +18,12 @@ class EventLoop;
 class Channel {
  public:
   using EventCallBack = std::function<void()>;
+  using ReadEventCallBack = std::function<void(Timestamp)>;
   Channel(EventLoop *loop, int fd);
   ~Channel();
 
-  void HandleEvent();
-  void SetReadCallBack(EventCallBack cb);
+  void HandleEvent(Timestamp receive_time);
+  void SetReadCallBack(ReadEventCallBack cb);
   void SetWriteCallBack(EventCallBack cb);
   void SetCloseCallBack(EventCallBack cb);
   void SetErrorCallBack(EventCallBack cb);
@@ -55,13 +57,14 @@ class Channel {
   int revents_;
   int index_;
 
+  bool event_handing_;
   bool add_to_loop_;
 
   static const int kNoneEvent;
   static const int kReadEvent;
   static const int kWriteEvent;
 
-  EventCallBack read_call_back_;
+  ReadEventCallBack read_call_back_;
   EventCallBack write_call_back_;
   EventCallBack close_call_back_;
   EventCallBack error_call_back_;

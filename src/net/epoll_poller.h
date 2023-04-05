@@ -26,8 +26,11 @@ class EpollPoller : public Poller {
   void RemoveChannel(Channel *channel) override;
 
  private:
+  static const char* OperationToString(int op);
   void FillActiveChannels(int num_events, ChannelList* active_channels) const;
+  void Update(int operation, Channel* channel) const;
 
+ private:
   static const int kInitEventListSize;
   using EventList = std::vector<struct epoll_event>;
 

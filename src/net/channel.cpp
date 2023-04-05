@@ -16,31 +16,39 @@ Channel::Channel(EventLoop *loop, int fd)
 	  events_(0),
 	  revents_(0),
 	  index_(-1),
+	  event_handing_(false),
 	  add_to_loop_(false) {
 }
 
 Channel::~Channel() {
+  assert(!event_handing_);
   assert(!add_to_loop_);
   if (loop_->IsInLoopThread())
 	assert(!loop_->HaveChannel(this));
 }
 
-void Channel::HandleEvent() {
-  //TODO: timestamp
+void Channel::HandleEvent(Timestamp receive_time) {
+  event_handing_ = true;
   if (revents_ & (EPOLLIN | EPOLLPRI | EPOLLRDHUP)) {
 	if (read_call_back_)
-	  read_call_back_();
-  }
-  if (revents_ & EPOLLERR) {
-	if (error_call_back_)
-	  error_call_back_();
+	  read_call_back_(receive_time);
   }
   if (revents_ & EPOLLOUT) {
 	if (write_call_back_)
 	  write_call_back_();
   }
+  if ((revents_ & EPOLLHUP) && !(revents_ & EPOLLIN)) {
+	if (close_call_back_)
+	  close_call_back_();
+  }
+  if (revents_ & EPOLLERR) {
+	if (error_call_back_)
+	  error_call_back_();
+  }
+
+  event_handing_ = false;
 }
-void Channel::SetReadCallBack(Channel::EventCallBack cb) {
+void Channel::SetReadCallBack(Channel::ReadEventCallBack cb) {
   read_call_back_ = std::move(cb);
 }
 
